@@ -1,6 +1,6 @@
 package br.com.angelorobson.whatsapplinkgenerator.linkgenerator.widgets
 
-import android.content.Context
+import android.app.Activity
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -10,11 +10,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import br.com.angelorobson.whatsapplinkgenerator.R
 import br.com.angelorobson.whatsapplinkgenerator.model.domains.Country
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 
-class CountryAdapter(context: Context, countries: List<Country>) :
-    ArrayAdapter<Country>(context, 0, countries) {
+class CountryAdapter(private val activity: Activity, countries: List<Country>) :
+    ArrayAdapter<Country>(activity, 0, countries) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         return initView(position, convertView, parent)
@@ -33,21 +32,18 @@ class CountryAdapter(context: Context, countries: List<Country>) :
         }
 
         val imageFlag = converterV?.findViewById<ImageView>(R.id.ivFlag)
-        val textView = converterV?.findViewById<TextView>(R.id.tvCountryName)
+        val textViewCountryName = converterV?.findViewById<TextView>(R.id.tvCountryName)
+        val textViewCodeArea = converterV?.findViewById<TextView>(R.id.tvCountryCode)
 
         val country = getItem(position)
 
         val uri =
             Uri.parse(country?.flag)
 
-        Glide.with(context)
-            .load(uri)
-            .diskCacheStrategy(DiskCacheStrategy.DATA)
-            .fitCenter()
-            .into(imageFlag!!)
+        GlideToVectorYou.justLoadImage(activity, uri, imageFlag!!)
 
-
-        textView?.text = country?.countryFullName
+        textViewCountryName?.text = country?.countryShortName
+        textViewCodeArea?.text = activity.getString(R.string.area_code, country?.areaCode)
 
         return converterV!!
     }

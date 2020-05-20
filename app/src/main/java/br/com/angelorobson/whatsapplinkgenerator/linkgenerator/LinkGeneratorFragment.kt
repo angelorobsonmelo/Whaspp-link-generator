@@ -35,7 +35,7 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
 
     private fun handleSpinner(countries: List<Country>) {
         val adapter =
-            CountryAdapter(requireContext(), countries)
+            CountryAdapter(requireActivity(), countries)
         spinnerCountryCode.adapter = adapter
 
         val countryShortName = Locale.getDefault().country

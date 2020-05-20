@@ -8,7 +8,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp">
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -25,11 +25,11 @@
 
         <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/spinnerCountryCode"
-            android:spinnerMode="dialog"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:hint="@string/app_name"
+            android:spinnerMode="dialog"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvCountryCode" />
 
@@ -38,7 +38,7 @@
             android:id="@+id/tvPhoneNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:text="@string/phone_number"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/labelColor"
@@ -70,7 +70,7 @@
             android:id="@+id/etTextMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="32dp"
             android:hint="@string/message"
             app:layout_constraintEnd_toEndOf="parent"
@@ -86,6 +86,7 @@
             android:textSize="12sp"
             app:cornerRadius="0dp"
             app:icon="@drawable/ic_send"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btnShareLink"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/etTextMessage" />
@@ -100,6 +101,7 @@
             android:textSize="12sp"
             app:cornerRadius="0dp"
             app:icon="@drawable/ic_content"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/btnSendMessage"
             app:layout_constraintTop_toBottomOf="@id/etTextMessage"
             app:layout_constraintTop_toTopOf="@id/btnSendMessage" />

@@ -24,8 +24,8 @@ ext {
     testingVersion = '1.2.0'
     mockWebServerVersion = '4.2.1'
     ioMockVersion = '1.8.7'
-    roomVersion = '2.2.1'
-    glideVersion = '4.11.0'
+    roomVersion = '2.2.5'
+    glideToVectorYouVersion = 'v2.0.0'
 }
 
 allprojects {
@@ -34,6 +34,7 @@ allprojects {
             google()
             jcenter()
             gradlePluginPortal()
+
         }
         dependencies {
             classpath "com.android.tools.build:gradle:$androidGradlePluginVersion"
@@ -45,6 +46,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url 'https://jitpack.io' }
     }
 }
 

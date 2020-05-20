@@ -13,4 +13,8 @@
     <string name="socket_timout_error">Request time out, please try again.</string>
     <string name="no_internet_connection_error">No Internet Connection</string>
     <string name="unknown_error">Unknown error, contact the app developer</string>
+
+
+    <string name="area_code" translatable="false">(+%1$s)</string>
+
 </resources>
