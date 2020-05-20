@@ -20,11 +20,25 @@ fun linkGeneratorUpdate(
     return when (event) {
         is Initial -> dispatch(setOf(ObserveCountries))
         is CountriesLoaded -> next(
-            model.copy(countries = event.countries)
+            model.copy(
+                linkGeneratorResult = LinkGeneratorResult.CountriesLoaded(
+                    countries = event.countries,
+                    isLoading = false,
+                    error = false
+                )
+            )
         )
         ButtonSendClicked -> noChange()
         ButtonShareLinkClicked -> next(model.copy())
-        is CountriesApiException -> TODO()
+        is CountriesApiException -> next(
+            model.copy(
+                linkGeneratorResult = LinkGeneratorResult.Error(
+                    errorMessage = event.errorMessage,
+                    error = true,
+                    isLoading = false
+                )
+            )
+        )
     }
 }
 
