@@ -25,6 +25,7 @@ ext {
     mockWebServerVersion = '4.2.1'
     ioMockVersion = '1.8.7'
     roomVersion = '2.2.1'
+    glideVersion = '4.11.0'
 }
 
 allprojects {
