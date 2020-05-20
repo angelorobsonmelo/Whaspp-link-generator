@@ -11,6 +11,7 @@ import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.link_generator_fragment.*
+import java.util.*
 
 class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
 
@@ -37,6 +38,15 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
             CountryAdapter(requireContext(), countries)
         spinnerCountryCode.adapter = adapter
 
+        val countryShortName = Locale.getDefault().country
+
+        val position = adapter.getPosition(
+            countries.filter {
+                it.countryShortName == countryShortName
+            }[0]
+        )
+
+        spinnerCountryCode.setSelection(position)
 
         spinnerCountryCode.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}

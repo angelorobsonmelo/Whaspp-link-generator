@@ -23,8 +23,9 @@ class CountryRepository @Inject constructor(
 
 fun mapToCountry(dto: CountryDto): Country {
     return Country(
-        name = dto.name,
+        countryFullName = dto.name,
         areaCode = dto.callingCodes.first(),
-        flag = dto.flag
+        flag = dto.flag,
+        countryShortName = dto.alpha2Code
     )
 }

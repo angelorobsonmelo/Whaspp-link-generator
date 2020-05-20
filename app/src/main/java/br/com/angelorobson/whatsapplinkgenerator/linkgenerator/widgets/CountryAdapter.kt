@@ -47,7 +47,7 @@ class CountryAdapter(context: Context, countries: List<Country>) :
             .into(imageFlag!!)
 
 
-        textView?.text = country?.name
+        textView?.text = country?.countryFullName
 
         return converterV!!
     }

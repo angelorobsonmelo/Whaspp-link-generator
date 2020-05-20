@@ -6,5 +6,6 @@ import com.squareup.moshi.JsonClass
 data class CountryDto(
     val name: String,
     val flag: String,
-    val callingCodes: List<String>
+    val callingCodes: List<String>,
+    val alpha2Code: String
 )
