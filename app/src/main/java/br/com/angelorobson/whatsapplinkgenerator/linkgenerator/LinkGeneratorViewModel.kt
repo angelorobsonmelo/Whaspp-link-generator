@@ -2,12 +2,12 @@ package br.com.angelorobson.whatsapplinkgenerator.linkgenerator
 
 import br.com.angelorobson.whatsapplinkgenerator.MobiusVM
 import br.com.angelorobson.whatsapplinkgenerator.model.repositories.CountryRepository
+import br.com.angelorobson.whatsapplinkgenerator.utils.HandlerErrorRemoteDataSource.validateStatusCode
 import br.com.angelorobson.whatsapplinkgenerator.utils.Navigator
 import com.spotify.mobius.Next
 import com.spotify.mobius.Next.*
 import com.spotify.mobius.Update
 import com.spotify.mobius.rx2.RxMobius
-import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -23,6 +23,8 @@ fun linkGeneratorUpdate(
             model.copy(countries = event.countries)
         )
         ButtonSendClicked -> noChange()
+        ButtonShareLinkClicked -> next(model.copy())
+        is CountriesApiException -> TODO()
     }
 }
 
@@ -41,6 +43,10 @@ class LinkGeneratorViewModel @Inject constructor(
                     .observeOn(AndroidSchedulers.mainThread())
                     .map {
                         CountriesLoaded(it)
+                    }
+                    .doOnError {
+                        val errorMessage = validateStatusCode(it)
+                        CountriesApiException(errorMessage)
                     }
             }
         }.build()

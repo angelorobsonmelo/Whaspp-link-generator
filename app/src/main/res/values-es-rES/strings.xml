@@ -8,4 +8,10 @@
     <string name="message">Mensaje</string>
     <string name="send">Enviar</string>
     <string name="copy_link">Copiar Link</string>
+
+    <string name="unauthorized">Correo o contraseña incorrectos.</string>
+    <string name="internal_error">Se ha producido un error interno del servidor.</string>
+    <string name="socket_timout_error">Solicite tiempo de espera, intente nuevamente.</string>
+    <string name="no_internet_connection_error">Sin conexión a Internet</string>
+    <string name="unknown_error">Error desconocido, contacta al desarrollador de la aplicación</string>
 </resources>

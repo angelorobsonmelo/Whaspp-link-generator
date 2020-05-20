@@ -16,7 +16,9 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
         super.onStart()
 
         disposable = Observable.mergeArray(
-            btnSendMessage.clicks().map { ButtonSendClicked }
+            btnSendMessage.clicks().map {
+                ButtonSendClicked
+            }
         ).compose(getViewModel(LinkGeneratorViewModel::class).init(Initial))
             .subscribe {
                 print(it)

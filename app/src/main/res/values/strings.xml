@@ -7,4 +7,10 @@
     <string name="message">Message</string>
     <string name="send">Send</string>
     <string name="copy_link">Copy Link</string>
+
+    <string name="unauthorized">Incorrect email or password.</string>
+    <string name="internal_error">An internal server error has occurred.</string>
+    <string name="socket_timout_error">Request time out, please try again.</string>
+    <string name="no_internet_connection_error">No Internet Connection</string>
+    <string name="unknown_error">Unknown error, contact the app developer</string>
 </resources>
