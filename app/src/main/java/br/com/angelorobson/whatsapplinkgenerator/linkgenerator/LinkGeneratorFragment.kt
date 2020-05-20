@@ -1,5 +1,7 @@
 package br.com.angelorobson.whatsapplinkgenerator.linkgenerator
 
+import android.view.View
+import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import br.com.angelorobson.whatsapplinkgenerator.R
 import br.com.angelorobson.whatsapplinkgenerator.getViewModel
@@ -34,6 +36,22 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
         val adapter =
             CountryAdapter(requireContext(), countries)
         spinnerCountryCode.adapter = adapter
+
+
+        spinnerCountryCode.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val country = parent?.getItemAtPosition(position) as Country
+                println(country.toString())
+            }
+
+        }
 
 
     }
