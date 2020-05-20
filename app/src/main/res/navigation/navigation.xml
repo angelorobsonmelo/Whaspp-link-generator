@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/linkGeneratorFragment"
+    tools:ignore="UnusedNavigation">
+
+    <fragment
+        android:id="@+id/linkGeneratorFragment"
+        android:name="br.com.angelorobson.whatsapplinkgenerator.linkgenerator.LinkGeneratorFragment"
+        android:label="LinkGeneratorFragment" />
+</navigation>
