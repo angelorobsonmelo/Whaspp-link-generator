@@ -1,102 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="match_parent">
 
-    android:layout_marginStart="16dp">
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvCountryCode"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/country_code"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/labelColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        android:layout_marginStart="16dp">
 
-    <androidx.appcompat.widget.AppCompatSpinner
-        android:id="@+id/spinnerCountryCode"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:hint="@string/app_name"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvCountryCode" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvCountryCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/country_code"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/labelColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvPhoneNumber"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/phone_number"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/labelColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spinnerCountryCode" />
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/etRegionCode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="@string/hint_code"
-        android:inputType="phone"
-        android:maxLines="1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvPhoneNumber" />
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/etPhoneNumber"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:hint="@string/cell_phone"
-        android:inputType="phone"
-        android:maxLines="1"
-        app:layout_constraintStart_toEndOf="@id/etRegionCode"
-        app:layout_constraintTop_toTopOf="@id/etRegionCode" />
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/etTextMessage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        android:hint="@string/message"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etRegionCode" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnSendMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/send"
-        android:textSize="12sp"
-        app:cornerRadius="0dp"
-        app:icon="@drawable/ic_send"
-        app:layout_constraintEnd_toStartOf="@id/btnShareLink"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etTextMessage" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnShareLink"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/copy_link"
-        android:textSize="12sp"
-        app:cornerRadius="0dp"
-        app:icon="@drawable/ic_content"
-        app:layout_constraintStart_toEndOf="@id/btnSendMessage"
-        app:layout_constraintTop_toBottomOf="@id/etTextMessage"
-        app:layout_constraintTop_toTopOf="@id/btnSendMessage" />
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spinnerCountryCode"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/app_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvCountryCode" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvPhoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/phone_number"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/labelColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/spinnerCountryCode" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etRegionCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_code"
+            android:inputType="phone"
+            android:maxLines="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvPhoneNumber" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPhoneNumber"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:hint="@string/cell_phone"
+            android:inputType="phone"
+            android:maxLines="1"
+            app:layout_constraintStart_toEndOf="@id/etRegionCode"
+            app:layout_constraintTop_toTopOf="@id/etRegionCode" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etTextMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:hint="@string/message"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etRegionCode" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSendMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/send"
+            android:textSize="12sp"
+            app:cornerRadius="0dp"
+            app:icon="@drawable/ic_send"
+            app:layout_constraintEnd_toStartOf="@id/btnShareLink"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etTextMessage" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnShareLink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/copy_link"
+            android:textSize="12sp"
+            app:cornerRadius="0dp"
+            app:icon="@drawable/ic_content"
+            app:layout_constraintStart_toEndOf="@id/btnSendMessage"
+            app:layout_constraintTop_toBottomOf="@id/etTextMessage"
+            app:layout_constraintTop_toTopOf="@id/btnSendMessage" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
