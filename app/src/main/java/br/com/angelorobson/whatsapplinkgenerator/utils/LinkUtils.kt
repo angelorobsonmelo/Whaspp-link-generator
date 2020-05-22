@@ -59,10 +59,10 @@ fun copyToClipBoard(
     )
 }
 
-private fun showToast(message: String, context: Context) {
+fun showToast(message: String, context: Context, duration: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(
         context,
         message,
-        Toast.LENGTH_SHORT
+        duration
     ).show()
 }

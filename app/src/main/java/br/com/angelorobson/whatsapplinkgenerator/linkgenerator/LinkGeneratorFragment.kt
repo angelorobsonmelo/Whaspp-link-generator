@@ -2,6 +2,7 @@ package br.com.angelorobson.whatsapplinkgenerator.linkgenerator
 
 import android.view.View
 import android.widget.AdapterView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import br.com.angelorobson.whatsapplinkgenerator.R
 import br.com.angelorobson.whatsapplinkgenerator.getViewModel
@@ -9,6 +10,7 @@ import br.com.angelorobson.whatsapplinkgenerator.utils.copyToClipBoard
 import br.com.angelorobson.whatsapplinkgenerator.utils.sendMessageToWhatsApp
 import br.com.angelorobson.whatsapplinkgenerator.linkgenerator.widgets.CountryAdapter
 import br.com.angelorobson.whatsapplinkgenerator.model.domains.Country
+import br.com.angelorobson.whatsapplinkgenerator.utils.showToast
 import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -52,12 +54,18 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
                         requireActivity()
                     )
                 }
-
                 if (model.linkGeneratorResult is LinkGeneratorResult.ContactInformationToCopy) {
                     val contactInformation = model.linkGeneratorResult
                     copyToClipBoard(
                         contactInformation,
                         requireActivity()
+                    )
+                }
+                if (model.linkGeneratorResult is LinkGeneratorResult.Error) {
+                    showToast(
+                        model.linkGeneratorResult.errorMessage,
+                        requireActivity(),
+                        Toast.LENGTH_LONG
                     )
                 }
             }
