@@ -1,5 +1,8 @@
 package br.com.angelorobson.whatsapplinkgenerator.linkgenerator
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.View
@@ -14,14 +17,16 @@ import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.link_generator_fragment.*
-import java.net.URLEncoder
+import java.text.MessageFormat
 import java.util.*
 
 
 class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
 
+    private val link = "https://api.whatsapp.com/send?phone={0}{1}&text={2}"
 
     lateinit var disposable: Disposable
+
 
     override fun onStart() {
         super.onStart()
@@ -61,7 +66,22 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
                     val contactInformation = model.linkGeneratorResult
                     shareLink(contactInformation)
                 }
+
+                if (model.linkGeneratorResult is LinkGeneratorResult.ContactInformationToCopy) {
+                    val contactInformation = model.linkGeneratorResult
+                    copyToClipBoard(contactInformation)
+                }
             }
+    }
+
+    private fun copyToClipBoard(info: LinkGeneratorResult.ContactInformationToCopy) {
+        val url = MessageFormat.format(link, info.countryCode, info.phoneNumber, info.message)
+        val clipboard =
+            activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip: ClipData = ClipData.newPlainText("linkWhatsApp", url)
+
+        clipboard.setPrimaryClip(clip)
+        showToast(getString(R.string.copied))
     }
 
     private fun buttonSendClicked(): ButtonSendClicked {
@@ -88,32 +108,28 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
         )
     }
 
-    private fun sendMessageToWhatsApp(contactInformationToSend: LinkGeneratorResult.ContactInformationToSend) {
+    private fun sendMessageToWhatsApp(info: LinkGeneratorResult.ContactInformationToSend) {
         try {
             val packageManager = requireActivity().packageManager
             val i = Intent(Intent.ACTION_VIEW)
-            val url =
-                "https://api.whatsapp.com/send?phone=${contactInformationToSend.countryCode}" +
-                        "${contactInformationToSend.phoneNumber}&text=" + URLEncoder.encode(
-                    contactInformationToSend.message,
-                    "UTF-8"
-                )
+            val url = MessageFormat.format(link, info.countryCode, info.phoneNumber, info.message)
+
             i.setPackage("com.whatsapp")
             i.data = Uri.parse(url)
             if (i.resolveActivity(packageManager) != null) {
                 startActivity(i)
             } else {
-                showToast()
+                showToast(getString(R.string.whatApp_not_installed))
             }
         } catch (e: Exception) {
-            showToast()
+            showToast(getString(R.string.whatApp_not_installed))
         }
     }
 
-    private fun showToast() {
+    private fun showToast(message: String) {
         Toast.makeText(
             requireContext(),
-            getString(R.string.whatApp_not_installed),
+            message,
             Toast.LENGTH_SHORT
         ).show()
     }
@@ -136,6 +152,16 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
         }
 
         return valid
+    }
+
+    private fun shareLink(info: LinkGeneratorResult.ContactInformationToShare) {
+        val url = MessageFormat.format(link, info.countryCode, info.phoneNumber, info.message)
+        val intent = Intent(Intent.ACTION_SEND)
+
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.whatApp_not_installed))
+        intent.putExtra(Intent.EXTRA_TEXT, url)
+        startActivity(Intent.createChooser(intent, getString(R.string.share_via)))
     }
 
     private fun handleSpinner(countries: List<Country>) {
@@ -173,21 +199,6 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
         }
 
 
-    }
-
-    private fun shareLink(contactInformationToShare: LinkGeneratorResult.ContactInformationToShare) {
-        val url =
-            "https://api.whatsapp.com/send?phone=${contactInformationToShare.countryCode}" +
-                    "${contactInformationToShare.phoneNumber}&text=" + URLEncoder.encode(
-                contactInformationToShare.message,
-                "UTF-8"
-            )
-
-        val intent = Intent(Intent.ACTION_SEND)
-        intent.type = "text/plain"
-        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.whatApp_not_installed))
-        intent.putExtra(Intent.EXTRA_TEXT, url)
-        startActivity(Intent.createChooser(intent, getString(R.string.share_via)))
     }
 
     override fun onDestroy() {
