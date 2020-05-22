@@ -63,16 +63,6 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
             }
     }
 
-    private fun copyToClipBoard(info: LinkGeneratorResult.ContactInformationToCopy) {
-        val url = MessageFormat.format(link, info.countryCode, info.phoneNumber, info.message)
-        val clipboard =
-            activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip: ClipData = ClipData.newPlainText("linkWhatsApp", url)
-
-        clipboard.setPrimaryClip(clip)
-        showToast(getString(R.string.copied))
-    }
-
     private fun buttonSendClicked(): ButtonSendClicked {
         return ButtonSendClicked(
             etRegionCode.text.toString(),
@@ -87,6 +77,16 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
             etPhoneNumber.text.toString(),
             etTextMessage.text.toString()
         )
+    }
+
+    private fun copyToClipBoard(info: LinkGeneratorResult.ContactInformationToCopy) {
+        val url = MessageFormat.format(link, info.countryCode, info.phoneNumber, info.message)
+        val clipboard =
+            activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip: ClipData = ClipData.newPlainText("linkWhatsApp", url)
+
+        clipboard.setPrimaryClip(clip)
+        showToast(getString(R.string.copied))
     }
 
     private fun sendMessageToWhatsApp(info: LinkGeneratorResult.ContactInformationToSend) {
@@ -127,7 +127,7 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
             valid = false
         }
 
-        if (etTextMessage.text?.isEmpty()!!) {
+        if (etTextMessage.text?.isEmpty()!! || etTextMessage.text?.isBlank()!!) {
             etTextMessage.error = getString(R.string.empty_field)
             valid = false
         }
