@@ -28,7 +28,6 @@ fun linkGeneratorUpdate(
                 )
             )
         )
-
         is CountriesApiException -> next(
             model.copy(
                 linkGeneratorResult = LinkGeneratorResult.Error(
@@ -42,15 +41,6 @@ fun linkGeneratorUpdate(
         is ButtonSendClicked -> next(
             model.copy(
                 linkGeneratorResult = LinkGeneratorResult.ContactInformationToSend(
-                    countryCode = event.countryCode,
-                    phoneNumber = event.phoneNumber,
-                    message = event.message
-                )
-            )
-        )
-        is ButtonShareClicked -> next(
-            model.copy(
-                linkGeneratorResult = LinkGeneratorResult.ContactInformationToShare(
                     countryCode = event.countryCode,
                     phoneNumber = event.phoneNumber,
                     message = event.message

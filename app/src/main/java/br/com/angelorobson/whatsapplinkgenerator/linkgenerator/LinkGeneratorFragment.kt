@@ -39,13 +39,6 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
                     FormInvalid
                 }
             },
-            btnShareLink.clicks().map {
-                if (isFormValid()) {
-                    buttonShareViaClicked()
-                } else {
-                    FormInvalid
-                }
-            },
             btnCopyLink.clicks().map {
                 if (isFormValid()) {
                     buttonCopyClicked()
@@ -61,10 +54,6 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
                 if (model.linkGeneratorResult is LinkGeneratorResult.ContactInformationToSend) {
                     val contactInformation = model.linkGeneratorResult
                     sendMessageToWhatsApp(contactInformation)
-                }
-                if (model.linkGeneratorResult is LinkGeneratorResult.ContactInformationToShare) {
-                    val contactInformation = model.linkGeneratorResult
-                    shareLink(contactInformation)
                 }
 
                 if (model.linkGeneratorResult is LinkGeneratorResult.ContactInformationToCopy) {
@@ -86,14 +75,6 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
 
     private fun buttonSendClicked(): ButtonSendClicked {
         return ButtonSendClicked(
-            etRegionCode.text.toString(),
-            etPhoneNumber.text.toString(),
-            etTextMessage.text.toString()
-        )
-    }
-
-    private fun buttonShareViaClicked(): ButtonShareClicked {
-        return ButtonShareClicked(
             etRegionCode.text.toString(),
             etPhoneNumber.text.toString(),
             etTextMessage.text.toString()
@@ -152,16 +133,6 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
         }
 
         return valid
-    }
-
-    private fun shareLink(info: LinkGeneratorResult.ContactInformationToShare) {
-        val url = MessageFormat.format(link, info.countryCode, info.phoneNumber, info.message)
-        val intent = Intent(Intent.ACTION_SEND)
-
-        intent.type = "text/plain"
-        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.whatApp_not_installed))
-        intent.putExtra(Intent.EXTRA_TEXT, url)
-        startActivity(Intent.createChooser(intent, getString(R.string.share_via)))
     }
 
     private fun handleSpinner(countries: List<Country>) {

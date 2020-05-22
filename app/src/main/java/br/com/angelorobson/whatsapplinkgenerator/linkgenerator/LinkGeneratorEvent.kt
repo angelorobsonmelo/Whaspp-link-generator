@@ -6,11 +6,6 @@ sealed class LinkGeneratorEvent
 
 object Initial : LinkGeneratorEvent()
 
-data class ButtonShareClicked(
-    val countryCode: String = "",
-    val phoneNumber: String = "",
-    val message: String = ""
-) : LinkGeneratorEvent()
 
 data class ButtonSendClicked(
     val countryCode: String = "",

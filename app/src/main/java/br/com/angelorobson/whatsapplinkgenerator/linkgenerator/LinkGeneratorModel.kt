@@ -28,12 +28,6 @@ sealed class LinkGeneratorResult {
         val message: String = ""
     ) : LinkGeneratorResult()
 
-    data class ContactInformationToShare(
-        val countryCode: String = "",
-        val phoneNumber: String = "",
-        val message: String = ""
-    ) : LinkGeneratorResult()
-
     data class ContactInformationToCopy(
         val countryCode: String = "",
         val phoneNumber: String = "",
