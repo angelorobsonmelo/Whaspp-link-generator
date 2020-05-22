@@ -29,11 +29,21 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
         disposable = Observable.mergeArray(
             btnSendMessage.clicks().map {
                 if (isFormValid()) {
-                    ButtonSendClicked(
-                        etRegionCode.text.toString(),
-                        etPhoneNumber.text.toString(),
-                        etTextMessage.text.toString()
-                    )
+                    buttonSendClicked()
+                } else {
+                    FormInvalid
+                }
+            },
+            btnShareLink.clicks().map {
+                if (isFormValid()) {
+                    buttonShareViaClicked()
+                } else {
+                    FormInvalid
+                }
+            },
+            btnCopyLink.clicks().map {
+                if (isFormValid()) {
+                    buttonCopyClicked()
                 } else {
                     FormInvalid
                 }
@@ -43,21 +53,49 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
                 if (model.linkGeneratorResult is LinkGeneratorResult.CountriesLoaded) {
                     handleSpinner(model.linkGeneratorResult.countries)
                 }
-                if (model.linkGeneratorResult is LinkGeneratorResult.ContactInformation) {
+                if (model.linkGeneratorResult is LinkGeneratorResult.ContactInformationToSend) {
                     val contactInformation = model.linkGeneratorResult
                     sendMessageToWhatsApp(contactInformation)
+                }
+                if (model.linkGeneratorResult is LinkGeneratorResult.ContactInformationToShare) {
+                    val contactInformation = model.linkGeneratorResult
+                    shareLink(contactInformation)
                 }
             }
     }
 
-    private fun sendMessageToWhatsApp(contactInformation: LinkGeneratorResult.ContactInformation) {
+    private fun buttonSendClicked(): ButtonSendClicked {
+        return ButtonSendClicked(
+            etRegionCode.text.toString(),
+            etPhoneNumber.text.toString(),
+            etTextMessage.text.toString()
+        )
+    }
+
+    private fun buttonShareViaClicked(): ButtonShareClicked {
+        return ButtonShareClicked(
+            etRegionCode.text.toString(),
+            etPhoneNumber.text.toString(),
+            etTextMessage.text.toString()
+        )
+    }
+
+    private fun buttonCopyClicked(): ButtonCopyClicked {
+        return ButtonCopyClicked(
+            etRegionCode.text.toString(),
+            etPhoneNumber.text.toString(),
+            etTextMessage.text.toString()
+        )
+    }
+
+    private fun sendMessageToWhatsApp(contactInformationToSend: LinkGeneratorResult.ContactInformationToSend) {
         try {
             val packageManager = requireActivity().packageManager
             val i = Intent(Intent.ACTION_VIEW)
             val url =
-                "https://api.whatsapp.com/send?phone=${contactInformation.countryCode}" +
-                        "${contactInformation.phoneNumber}&text=" + URLEncoder.encode(
-                    contactInformation.message,
+                "https://api.whatsapp.com/send?phone=${contactInformationToSend.countryCode}" +
+                        "${contactInformationToSend.phoneNumber}&text=" + URLEncoder.encode(
+                    contactInformationToSend.message,
                     "UTF-8"
                 )
             i.setPackage("com.whatsapp")
@@ -135,6 +173,21 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
         }
 
 
+    }
+
+    private fun shareLink(contactInformationToShare: LinkGeneratorResult.ContactInformationToShare) {
+        val url =
+            "https://api.whatsapp.com/send?phone=${contactInformationToShare.countryCode}" +
+                    "${contactInformationToShare.phoneNumber}&text=" + URLEncoder.encode(
+                contactInformationToShare.message,
+                "UTF-8"
+            )
+
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.whatApp_not_installed))
+        intent.putExtra(Intent.EXTRA_TEXT, url)
+        startActivity(Intent.createChooser(intent, getString(R.string.share_via)))
     }
 
     override fun onDestroy() {

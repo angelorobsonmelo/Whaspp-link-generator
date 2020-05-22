@@ -7,7 +7,7 @@
     <string name="cell_phone">Número</string>
     <string name="message">Mensagem</string>
     <string name="send">Enviar</string>
-    <string name="copy_link">Copiar Link</string>
+    <string name="copy_link">Copiar</string>
 
     <string name="unauthorized">E-mail ou senha incorreta.</string>
     <string name="internal_error">Ocorreu um erro interno no servidor.</string>
@@ -18,5 +18,9 @@
     <string name="whatApp_not_installed">Este campo não pode ficar em branco</string>
 
     <string name="empty_field">Preencha este campo</string>
+    <string name="share">Compartilhar</string>
+    <string name="share_via">Compartilhar Via</string>
+
+    <string name="whatApp_link">WhatsApp Link</string>
 
 </resources>

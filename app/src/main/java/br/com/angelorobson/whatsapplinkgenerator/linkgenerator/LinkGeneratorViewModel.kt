@@ -41,14 +41,31 @@ fun linkGeneratorUpdate(
         FormInvalid -> noChange()
         is ButtonSendClicked -> next(
             model.copy(
-                linkGeneratorResult = LinkGeneratorResult.ContactInformation(
+                linkGeneratorResult = LinkGeneratorResult.ContactInformationToSend(
                     countryCode = event.countryCode,
                     phoneNumber = event.phoneNumber,
                     message = event.message
                 )
             )
         )
-        ButtonShareLinkClicked -> noChange()
+        is ButtonShareClicked -> next(
+            model.copy(
+                linkGeneratorResult = LinkGeneratorResult.ContactInformationToShare(
+                    countryCode = event.countryCode,
+                    phoneNumber = event.phoneNumber,
+                    message = event.message
+                )
+            )
+        )
+        is ButtonCopyClicked -> next(
+            model.copy(
+                linkGeneratorResult = LinkGeneratorResult.ContactInformationToCopy(
+                    countryCode = event.countryCode,
+                    phoneNumber = event.phoneNumber,
+                    message = event.message
+                )
+            )
+        )
     }
 }
 

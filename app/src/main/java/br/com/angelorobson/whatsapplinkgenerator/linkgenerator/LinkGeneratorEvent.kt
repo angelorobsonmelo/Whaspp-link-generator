@@ -6,9 +6,11 @@ sealed class LinkGeneratorEvent
 
 object Initial : LinkGeneratorEvent()
 
-data class CountriesLoaded(val countries: List<Country>) : LinkGeneratorEvent()
-
-data class CountriesApiException(val errorMessage: String) : LinkGeneratorEvent()
+data class ButtonShareClicked(
+    val countryCode: String = "",
+    val phoneNumber: String = "",
+    val message: String = ""
+) : LinkGeneratorEvent()
 
 data class ButtonSendClicked(
     val countryCode: String = "",
@@ -16,6 +18,14 @@ data class ButtonSendClicked(
     val message: String = ""
 ) : LinkGeneratorEvent()
 
-object FormInvalid : LinkGeneratorEvent()
+data class ButtonCopyClicked(
+    val countryCode: String = "",
+    val phoneNumber: String = "",
+    val message: String = ""
+) : LinkGeneratorEvent()
 
-object ButtonShareLinkClicked : LinkGeneratorEvent()
+data class CountriesLoaded(val countries: List<Country>) : LinkGeneratorEvent()
+
+data class CountriesApiException(val errorMessage: String) : LinkGeneratorEvent()
+
+object FormInvalid : LinkGeneratorEvent()
