@@ -63,58 +63,6 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
             }
     }
 
-    private fun buttonSendClicked(): ButtonSendClicked {
-        return ButtonSendClicked(
-            etRegionCode.text.toString(),
-            etPhoneNumber.text.toString(),
-            etTextMessage.text.toString()
-        )
-    }
-
-    private fun buttonCopyClicked(): ButtonCopyClicked {
-        return ButtonCopyClicked(
-            etRegionCode.text.toString(),
-            etPhoneNumber.text.toString(),
-            etTextMessage.text.toString()
-        )
-    }
-
-    private fun copyToClipBoard(info: LinkGeneratorResult.ContactInformationToCopy) {
-        val url = MessageFormat.format(link, info.countryCode, info.phoneNumber, info.message)
-        val clipboard =
-            activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip: ClipData = ClipData.newPlainText("linkWhatsApp", url)
-
-        clipboard.setPrimaryClip(clip)
-        showToast(getString(R.string.copied))
-    }
-
-    private fun sendMessageToWhatsApp(info: LinkGeneratorResult.ContactInformationToSend) {
-        try {
-            val packageManager = requireActivity().packageManager
-            val i = Intent(Intent.ACTION_VIEW)
-            val url = MessageFormat.format(link, info.countryCode, info.phoneNumber, info.message)
-
-            i.setPackage("com.whatsapp")
-            i.data = Uri.parse(url)
-            if (i.resolveActivity(packageManager) != null) {
-                startActivity(i)
-            } else {
-                showToast(getString(R.string.whatApp_not_installed))
-            }
-        } catch (e: Exception) {
-            showToast(getString(R.string.whatApp_not_installed))
-        }
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(
-            requireContext(),
-            message,
-            Toast.LENGTH_SHORT
-        ).show()
-    }
-
     private fun isFormValid(): Boolean {
         var valid = true
         if (etRegionCode.text?.isEmpty()!!) {
@@ -133,6 +81,22 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
         }
 
         return valid
+    }
+
+    private fun buttonSendClicked(): ButtonSendClicked {
+        return ButtonSendClicked(
+            etRegionCode.text.toString(),
+            etPhoneNumber.text.toString(),
+            etTextMessage.text.toString()
+        )
+    }
+
+    private fun buttonCopyClicked(): ButtonCopyClicked {
+        return ButtonCopyClicked(
+            etRegionCode.text.toString(),
+            etPhoneNumber.text.toString(),
+            etTextMessage.text.toString()
+        )
     }
 
     private fun handleSpinner(countries: List<Country>) {
@@ -169,7 +133,42 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
 
         }
 
+    }
 
+    private fun sendMessageToWhatsApp(info: LinkGeneratorResult.ContactInformationToSend) {
+        try {
+            val packageManager = requireActivity().packageManager
+            val i = Intent(Intent.ACTION_VIEW)
+            val url = MessageFormat.format(link, info.countryCode, info.phoneNumber, info.message)
+
+            i.setPackage("com.whatsapp")
+            i.data = Uri.parse(url)
+            if (i.resolveActivity(packageManager) != null) {
+                startActivity(i)
+            } else {
+                showToast(getString(R.string.whatApp_not_installed))
+            }
+        } catch (e: Exception) {
+            showToast(getString(R.string.whatApp_not_installed))
+        }
+    }
+
+    private fun copyToClipBoard(info: LinkGeneratorResult.ContactInformationToCopy) {
+        val url = MessageFormat.format(link, info.countryCode, info.phoneNumber, info.message)
+        val clipboard =
+            activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip: ClipData = ClipData.newPlainText("linkWhatsApp", url)
+
+        clipboard.setPrimaryClip(clip)
+        showToast(getString(R.string.copied))
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(
+            requireContext(),
+            message,
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     override fun onDestroy() {
