@@ -1,29 +1,23 @@
 package br.com.angelorobson.whatsapplinkgenerator.linkgenerator
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.view.View
 import android.widget.AdapterView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import br.com.angelorobson.whatsapplinkgenerator.R
 import br.com.angelorobson.whatsapplinkgenerator.getViewModel
+import br.com.angelorobson.whatsapplinkgenerator.linkgenerator.utils.copyToClipBoard
+import br.com.angelorobson.whatsapplinkgenerator.linkgenerator.utils.sendMessageToWhatsApp
 import br.com.angelorobson.whatsapplinkgenerator.linkgenerator.widgets.CountryAdapter
 import br.com.angelorobson.whatsapplinkgenerator.model.domains.Country
 import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.link_generator_fragment.*
-import java.text.MessageFormat
 import java.util.*
 
 
 class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
 
-    private val link = "https://api.whatsapp.com/send?phone={0}{1}&text={2}"
 
     lateinit var disposable: Disposable
 
@@ -53,12 +47,12 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
                 }
                 if (model.linkGeneratorResult is LinkGeneratorResult.ContactInformationToSend) {
                     val contactInformation = model.linkGeneratorResult
-                    sendMessageToWhatsApp(contactInformation)
+                    sendMessageToWhatsApp(contactInformation, requireActivity())
                 }
 
                 if (model.linkGeneratorResult is LinkGeneratorResult.ContactInformationToCopy) {
                     val contactInformation = model.linkGeneratorResult
-                    copyToClipBoard(contactInformation)
+                    copyToClipBoard(contactInformation, requireActivity())
                 }
             }
     }
@@ -133,42 +127,6 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
 
         }
 
-    }
-
-    private fun sendMessageToWhatsApp(info: LinkGeneratorResult.ContactInformationToSend) {
-        try {
-            val packageManager = requireActivity().packageManager
-            val i = Intent(Intent.ACTION_VIEW)
-            val url = MessageFormat.format(link, info.countryCode, info.phoneNumber, info.message)
-
-            i.setPackage("com.whatsapp")
-            i.data = Uri.parse(url)
-            if (i.resolveActivity(packageManager) != null) {
-                startActivity(i)
-            } else {
-                showToast(getString(R.string.whatApp_not_installed))
-            }
-        } catch (e: Exception) {
-            showToast(getString(R.string.whatApp_not_installed))
-        }
-    }
-
-    private fun copyToClipBoard(info: LinkGeneratorResult.ContactInformationToCopy) {
-        val url = MessageFormat.format(link, info.countryCode, info.phoneNumber, info.message)
-        val clipboard =
-            activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip: ClipData = ClipData.newPlainText("linkWhatsApp", url)
-
-        clipboard.setPrimaryClip(clip)
-        showToast(getString(R.string.copied))
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(
-            requireContext(),
-            message,
-            Toast.LENGTH_SHORT
-        ).show()
     }
 
     override fun onDestroy() {
