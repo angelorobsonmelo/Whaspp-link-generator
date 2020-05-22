@@ -17,5 +17,9 @@
 
     <string name="area_code" translatable="false">(+%1$s)</string>
     <string name="area_code_formatted" translatable="false">+%1$s</string>
+    
+    <string name="whatApp_not_installed">WhatsApp not installed</string>
+
+    <string name="empty_field">Fill this field</string>
 
 </resources>

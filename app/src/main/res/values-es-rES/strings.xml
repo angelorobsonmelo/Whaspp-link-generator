@@ -14,4 +14,10 @@
     <string name="socket_timout_error">Solicite tiempo de espera, intente nuevamente.</string>
     <string name="no_internet_connection_error">Sin conexión a Internet</string>
     <string name="unknown_error">Error desconocido, contacta al desarrollador de la aplicación</string>
+
+    <string name="whatApp_not_installed">WhatsApp no ​​está instalado</string>
+
+    <string name="empty_field">Rellena este campo</string>
+
+
 </resources>

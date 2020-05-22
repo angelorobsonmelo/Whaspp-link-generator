@@ -14,4 +14,9 @@
     <string name="socket_timout_error">Tempo de requisição esgotado, por favor tente novamente.</string>
     <string name="no_internet_connection_error">Sem conexão com a internet</string>
     <string name="unknown_error">Erro desconhecido, entre em contato com o desenvolvedor do aplicativo</string>
+
+    <string name="whatApp_not_installed">Este campo não pode ficar em branco</string>
+
+    <string name="empty_field">Preencha este campo</string>
+
 </resources>

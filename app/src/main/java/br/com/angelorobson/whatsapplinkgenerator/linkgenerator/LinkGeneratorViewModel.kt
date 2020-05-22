@@ -28,8 +28,7 @@ fun linkGeneratorUpdate(
                 )
             )
         )
-        ButtonSendClicked -> noChange()
-        ButtonShareLinkClicked -> next(model.copy())
+
         is CountriesApiException -> next(
             model.copy(
                 linkGeneratorResult = LinkGeneratorResult.Error(
@@ -40,6 +39,16 @@ fun linkGeneratorUpdate(
             )
         )
         FormInvalid -> noChange()
+        is ButtonSendClicked -> next(
+            model.copy(
+                linkGeneratorResult = LinkGeneratorResult.ContactInformation(
+                    countryCode = event.countryCode,
+                    phoneNumber = event.phoneNumber,
+                    message = event.message
+                )
+            )
+        )
+        ButtonShareLinkClicked -> noChange()
     }
 }
 

@@ -10,7 +10,11 @@ data class CountriesLoaded(val countries: List<Country>) : LinkGeneratorEvent()
 
 data class CountriesApiException(val errorMessage: String) : LinkGeneratorEvent()
 
-object ButtonSendClicked : LinkGeneratorEvent()
+data class ButtonSendClicked(
+    val countryCode: String = "",
+    val phoneNumber: String = "",
+    val message: String = ""
+) : LinkGeneratorEvent()
 
 object FormInvalid : LinkGeneratorEvent()
 
