@@ -1,4 +1,4 @@
-package br.com.angelorobson.whatsapplinkgenerator.linkgenerator.utils
+package br.com.angelorobson.whatsapplinkgenerator.utils
 
 import android.app.Activity
 import android.content.ClipData
@@ -27,10 +27,18 @@ fun sendMessageToWhatsApp(
         if (i.resolveActivity(packageManager) != null) {
             activity.startActivity(i)
         } else {
-            showToast(activity.getString(R.string.whatApp_not_installed), activity)
+            showToast(
+                activity.getString(
+                    R.string.whatApp_not_installed
+                ), activity
+            )
         }
     } catch (e: Exception) {
-        showToast(activity.getString(R.string.whatApp_not_installed), activity)
+        showToast(
+            activity.getString(
+                R.string.whatApp_not_installed
+            ), activity
+        )
     }
 }
 
@@ -44,7 +52,11 @@ fun copyToClipBoard(
     val clip: ClipData = ClipData.newPlainText("linkWhatsApp", url)
 
     clipboard.setPrimaryClip(clip)
-    showToast(activity.getString(R.string.copied), activity)
+    showToast(
+        activity.getString(
+            R.string.copied
+        ), activity
+    )
 }
 
 private fun showToast(message: String, context: Context) {

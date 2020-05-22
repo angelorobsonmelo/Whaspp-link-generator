@@ -5,8 +5,8 @@ import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import br.com.angelorobson.whatsapplinkgenerator.R
 import br.com.angelorobson.whatsapplinkgenerator.getViewModel
-import br.com.angelorobson.whatsapplinkgenerator.linkgenerator.utils.copyToClipBoard
-import br.com.angelorobson.whatsapplinkgenerator.linkgenerator.utils.sendMessageToWhatsApp
+import br.com.angelorobson.whatsapplinkgenerator.utils.copyToClipBoard
+import br.com.angelorobson.whatsapplinkgenerator.utils.sendMessageToWhatsApp
 import br.com.angelorobson.whatsapplinkgenerator.linkgenerator.widgets.CountryAdapter
 import br.com.angelorobson.whatsapplinkgenerator.model.domains.Country
 import com.jakewharton.rxbinding3.view.clicks
@@ -47,12 +47,18 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
                 }
                 if (model.linkGeneratorResult is LinkGeneratorResult.ContactInformationToSend) {
                     val contactInformation = model.linkGeneratorResult
-                    sendMessageToWhatsApp(contactInformation, requireActivity())
+                    sendMessageToWhatsApp(
+                        contactInformation,
+                        requireActivity()
+                    )
                 }
 
                 if (model.linkGeneratorResult is LinkGeneratorResult.ContactInformationToCopy) {
                     val contactInformation = model.linkGeneratorResult
-                    copyToClipBoard(contactInformation, requireActivity())
+                    copyToClipBoard(
+                        contactInformation,
+                        requireActivity()
+                    )
                 }
             }
     }
