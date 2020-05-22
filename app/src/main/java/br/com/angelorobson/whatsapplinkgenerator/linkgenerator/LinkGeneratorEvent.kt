@@ -12,4 +12,6 @@ data class CountriesApiException(val errorMessage: String) : LinkGeneratorEvent(
 
 object ButtonSendClicked : LinkGeneratorEvent()
 
+object FormInvalid : LinkGeneratorEvent()
+
 object ButtonShareLinkClicked : LinkGeneratorEvent()

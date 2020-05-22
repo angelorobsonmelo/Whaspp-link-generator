@@ -13,16 +13,24 @@ import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.link_generator_fragment.*
 import java.util.*
 
+
 class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
 
-    lateinit var disposable: Disposable
 
+    lateinit var disposable: Disposable
 
     override fun onStart() {
         super.onStart()
 
         disposable = Observable.mergeArray(
             btnSendMessage.clicks().map {
+                if (isFormValid()) {
+                    ButtonSendClicked
+                } else {
+                    FormInvalid
+                }
+            },
+            btnShareLink.clicks().map {
                 ButtonSendClicked
             }
         ).compose(getViewModel(LinkGeneratorViewModel::class).init(Initial))
@@ -31,6 +39,26 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
                     handleSpinner(model.linkGeneratorResult.countries)
                 }
             }
+    }
+
+    private fun isFormValid(): Boolean {
+        var valid = true
+        if (etRegionCode.text?.isEmpty()!!) {
+            etRegionCode.error = "Preencha esta campo"
+            valid = false
+        }
+
+        if (etPhoneNumber.text?.isEmpty()!!) {
+            etPhoneNumber.error = "Preencha esta campo"
+            valid = false
+        }
+
+        if (etTextMessage.text?.isEmpty()!!) {
+            etTextMessage.error = "Preencha esta campo"
+            valid = false
+        }
+
+        return valid
     }
 
     private fun handleSpinner(countries: List<Country>) {
@@ -48,6 +76,9 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
 
         spinnerCountryCode.setSelection(position)
 
+        val areaCode = getString(R.string.area_code_formatted, countries[position].areaCode)
+        etRegionCode.setText(areaCode)
+
         spinnerCountryCode.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
 
@@ -58,7 +89,8 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
                 id: Long
             ) {
                 val country = parent?.getItemAtPosition(position) as Country
-                println(country.toString())
+                val areaCode = getString(R.string.area_code_formatted, country.areaCode)
+                etRegionCode.setText(areaCode)
             }
 
         }

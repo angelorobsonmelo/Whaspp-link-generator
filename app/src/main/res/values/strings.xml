@@ -16,5 +16,6 @@
 
 
     <string name="area_code" translatable="false">(+%1$s)</string>
+    <string name="area_code_formatted" translatable="false">+%1$s</string>
 
 </resources>

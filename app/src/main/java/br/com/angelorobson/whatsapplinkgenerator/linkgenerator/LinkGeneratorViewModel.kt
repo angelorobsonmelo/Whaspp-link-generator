@@ -39,6 +39,7 @@ fun linkGeneratorUpdate(
                 )
             )
         )
+        FormInvalid -> noChange()
     }
 }
 
