@@ -11,7 +11,11 @@ import br.com.angelorobson.whatsapplinkgenerator.R
 import br.com.angelorobson.whatsapplinkgenerator.linkgenerator.LinkGeneratorResult
 import java.text.MessageFormat
 
+
 private const val link = "https://api.whatsapp.com/send?phone={0}{1}&text={2}"
+const val WHAT_APP_RESULT_CODE = 985
+
+var countStartActivity = 1
 
 fun sendMessageToWhatsApp(
     info: LinkGeneratorResult.ContactInformationToSend,
@@ -25,7 +29,18 @@ fun sendMessageToWhatsApp(
         i.setPackage("com.whatsapp")
         i.data = Uri.parse(url)
         if (i.resolveActivity(packageManager) != null) {
+            i.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+            i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            i.addFlags(Intent.FLAG_FROM_BACKGROUND);
+
+            if (countStartActivity == 0) {
+                countStartActivity++
+                return
+            }
             activity.startActivity(i)
+            countStartActivity = 0
+
         } else {
             showToast(
                 activity.getString(

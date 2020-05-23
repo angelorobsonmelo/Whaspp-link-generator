@@ -53,6 +53,7 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
                         contactInformation,
                         requireActivity()
                     )
+                    disposable.dispose()
                 }
                 if (model.linkGeneratorResult is LinkGeneratorResult.ContactInformationToCopy) {
                     val contactInformation = model.linkGeneratorResult
