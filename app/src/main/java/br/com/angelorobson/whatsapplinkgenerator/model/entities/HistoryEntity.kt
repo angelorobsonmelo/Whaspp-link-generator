@@ -8,8 +8,9 @@ import androidx.room.PrimaryKey
 @Entity
 data class HistoryEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Int = 0,
     @ColumnInfo(name = "created_at")
     val createdAt: String,
+    val message: String,
     @Embedded val countryEntity: CountryEntity
 )

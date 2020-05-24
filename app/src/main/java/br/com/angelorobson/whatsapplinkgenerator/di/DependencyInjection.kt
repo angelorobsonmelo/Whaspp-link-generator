@@ -160,5 +160,5 @@ object RealModule {
     @Provides
     @Singleton
     @JvmStatic
-    fun productDao(database: ApplicationDatabase) = database.historyDao()
+    fun historyDao(database: ApplicationDatabase) = database.historyDao()
 }

@@ -1,7 +1,10 @@
 package br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator
 
+import br.com.angelorobson.whatsapplinkgenerator.model.database.dao.HistoryDao
+import br.com.angelorobson.whatsapplinkgenerator.model.domains.History
 import br.com.angelorobson.whatsapplinkgenerator.ui.MobiusVM
 import br.com.angelorobson.whatsapplinkgenerator.model.repositories.CountryRepository
+import br.com.angelorobson.whatsapplinkgenerator.model.repositories.HistoryRepository
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.HandlerErrorRemoteDataSource.validateStatusCode
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.Navigator
 import com.spotify.mobius.Next
@@ -47,6 +50,15 @@ fun linkGeneratorUpdate(
                     phoneNumber = event.phoneNumber,
                     message = event.message
                 )
+            ),
+            setOf(
+                SaveHistory(
+                    History(
+                        createdAt = getNow(),
+                        country = event.country,
+                        message = event.message
+                    )
+                )
             )
         )
         is ButtonCopyClicked -> next(
@@ -63,6 +75,7 @@ fun linkGeneratorUpdate(
 
 class LinkGeneratorViewModel @Inject constructor(
     repository: CountryRepository,
+    historyRepository: HistoryRepository,
     navigator: Navigator
 ) : MobiusVM<LinkGeneratorModel, LinkGeneratorEvent, LinkGeneratorEffect>(
     "LinkGeneratorViewModel",
@@ -82,7 +95,18 @@ class LinkGeneratorViewModel @Inject constructor(
                         CountriesApiException(errorMessage)
                     }
             }
-        }.build()
+        }
+        .addTransformer(SaveHistory::class.java) { upstream ->
+            upstream.switchMap { effect ->
+                historyRepository.saveHistory(effect.history)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .toObservable<LinkGeneratorEvent>()
+            }
+
+        }
+
+        .build()
 
 )
 

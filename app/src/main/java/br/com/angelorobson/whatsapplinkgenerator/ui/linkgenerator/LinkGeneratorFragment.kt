@@ -23,7 +23,7 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
 
 
     lateinit var disposable: Disposable
-
+    private var countrySelected = Country()
 
     override fun onStart() {
         super.onStart()
@@ -105,7 +105,8 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
         return ButtonSendClicked(
             etRegionCode.text.toString(),
             etPhoneNumber.text.toString(),
-            etTextMessage.text.toString()
+            etTextMessage.text.toString(),
+            countrySelected
         )
     }
 
@@ -147,6 +148,7 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
                 val country = parent?.getItemAtPosition(position) as Country
                 val countryCode = getString(R.string.area_code_formatted, country.areaCode)
                 etRegionCode.setText(countryCode)
+                countrySelected = country
             }
 
         }

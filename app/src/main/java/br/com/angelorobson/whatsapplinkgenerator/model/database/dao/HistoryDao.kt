@@ -11,7 +11,7 @@ import io.reactivex.Observable
 abstract class HistoryDao {
 
     @Query("SELECT * FROM HistoryEntity")
-    abstract fun get(): Observable<List<HistoryEntity>>
+    abstract fun getAll(): Observable<List<HistoryEntity>>
 
     @Insert
     abstract fun insert(historyEntity: HistoryEntity): Completable

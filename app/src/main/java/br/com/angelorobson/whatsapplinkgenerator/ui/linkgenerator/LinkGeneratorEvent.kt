@@ -10,7 +10,8 @@ object Initial : LinkGeneratorEvent()
 data class ButtonSendClicked(
     val countryCode: String = "",
     val phoneNumber: String = "",
-    val message: String = ""
+    val message: String = "",
+    val country: Country = Country()
 ) : LinkGeneratorEvent()
 
 data class ButtonCopyClicked(
