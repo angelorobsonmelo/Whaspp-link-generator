@@ -8,6 +8,7 @@ import br.com.angelorobson.whatsapplinkgenerator.R
 import br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator.LinkGeneratorViewModel
 import br.com.angelorobson.whatsapplinkgenerator.model.database.ApplicationDatabase
 import br.com.angelorobson.whatsapplinkgenerator.model.services.CountryService
+import br.com.angelorobson.whatsapplinkgenerator.ui.history.HistoryViewModel
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.ActivityService
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.IdlingResource
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.Navigator
@@ -93,6 +94,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(LinkGeneratorViewModel::class)
     abstract fun linkGeneratorViewModel(viewModel: LinkGeneratorViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(HistoryViewModel::class)
+    abstract fun historyViewModel(viewModel: HistoryViewModel): ViewModel
 }
 
 

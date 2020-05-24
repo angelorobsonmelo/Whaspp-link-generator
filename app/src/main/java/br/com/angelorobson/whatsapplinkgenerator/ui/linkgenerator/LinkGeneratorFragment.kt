@@ -22,7 +22,7 @@ import java.util.*
 class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
 
 
-    lateinit var disposable: Disposable
+    private lateinit var disposable: Disposable
     private var countrySelected = Country()
 
     override fun onStart() {

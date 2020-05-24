@@ -9,16 +9,14 @@ data class LinkGeneratorModel(
 sealed class LinkGeneratorResult {
     data class Error(
         val errorMessage: String,
-        val isLoading: Boolean = false,
-        val error: Boolean = false
+        val isLoading: Boolean = false
     ) : LinkGeneratorResult()
 
-    data class Loading(val isLoading: Boolean = true, val error: Boolean = false) :
+    data class Loading(val isLoading: Boolean = true) :
         LinkGeneratorResult()
 
     data class CountriesLoaded(
         val countries: List<Country> = listOf(),
-        val error: Boolean = false,
         val isLoading: Boolean = false
     ) : LinkGeneratorResult()
 

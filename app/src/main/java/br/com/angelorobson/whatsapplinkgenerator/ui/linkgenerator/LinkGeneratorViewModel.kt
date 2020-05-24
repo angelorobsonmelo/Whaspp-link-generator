@@ -27,8 +27,7 @@ fun linkGeneratorUpdate(
             model.copy(
                 linkGeneratorResult = LinkGeneratorResult.CountriesLoaded(
                     countries = event.countries,
-                    isLoading = false,
-                    error = false
+                    isLoading = false
                 )
             )
         )
@@ -36,7 +35,6 @@ fun linkGeneratorUpdate(
             model.copy(
                 linkGeneratorResult = LinkGeneratorResult.Error(
                     errorMessage = event.errorMessage,
-                    error = true,
                     isLoading = false
                 )
             )
