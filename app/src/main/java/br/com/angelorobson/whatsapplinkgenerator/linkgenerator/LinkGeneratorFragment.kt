@@ -3,6 +3,7 @@ package br.com.angelorobson.whatsapplinkgenerator.linkgenerator
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import br.com.angelorobson.whatsapplinkgenerator.R
 import br.com.angelorobson.whatsapplinkgenerator.getViewModel
@@ -44,7 +45,13 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
             }
         ).compose(getViewModel(LinkGeneratorViewModel::class).init(Initial))
             .subscribe { model ->
+                if (model.linkGeneratorResult is LinkGeneratorResult.Loading) {
+                    progress_horizontal.isVisible = model.linkGeneratorResult.isLoading
+                }
+
                 if (model.linkGeneratorResult is LinkGeneratorResult.CountriesLoaded) {
+                    progress_horizontal.isVisible = model.linkGeneratorResult.isLoading
+
                     handleSpinner(model.linkGeneratorResult.countries)
                 }
                 if (model.linkGeneratorResult is LinkGeneratorResult.ContactInformationToSend) {
@@ -63,6 +70,8 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
                     )
                 }
                 if (model.linkGeneratorResult is LinkGeneratorResult.Error) {
+                    progress_horizontal.isVisible = model.linkGeneratorResult.isLoading
+
                     showToast(
                         model.linkGeneratorResult.errorMessage,
                         requireActivity(),
