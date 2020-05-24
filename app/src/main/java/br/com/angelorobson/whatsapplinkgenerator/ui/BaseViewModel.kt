@@ -1,4 +1,4 @@
-package br.com.angelorobson.whatsapplinkgenerator
+package br.com.angelorobson.whatsapplinkgenerator.ui
 
 import androidx.lifecycle.ViewModel
 import com.spotify.mobius.MobiusLoop
@@ -24,7 +24,8 @@ abstract class MobiusVM<M, E, F>(
     initialModel: M,
     effectHandler: ObservableTransformer<F, E>,
     vararg eventSources: ObservableSource<E>
-) : ViewModel(), BaseViewModel<M, E> {
+) : ViewModel(),
+    BaseViewModel<M, E> {
     private val loop: MobiusLoop<M, E, F>
 
     private val initialized = AtomicBoolean(false)

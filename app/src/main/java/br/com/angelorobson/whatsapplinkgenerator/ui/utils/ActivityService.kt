@@ -1,4 +1,4 @@
-package br.com.angelorobson.whatsapplinkgenerator.utils
+package br.com.angelorobson.whatsapplinkgenerator.ui.utils
 
 import android.app.Activity
 

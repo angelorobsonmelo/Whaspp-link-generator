@@ -1,4 +1,4 @@
-package br.com.angelorobson.whatsapplinkgenerator.linkgenerator
+package br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator
 
 import br.com.angelorobson.whatsapplinkgenerator.model.domains.Country
 

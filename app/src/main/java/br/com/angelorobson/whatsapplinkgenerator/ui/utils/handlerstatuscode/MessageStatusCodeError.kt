@@ -1,4 +1,4 @@
-package br.com.angelorobson.whatsapplinkgenerator.utils.handlerstatuscode
+package br.com.angelorobson.whatsapplinkgenerator.ui.utils.handlerstatuscode
 
 interface MessageStatusCodeError {
 

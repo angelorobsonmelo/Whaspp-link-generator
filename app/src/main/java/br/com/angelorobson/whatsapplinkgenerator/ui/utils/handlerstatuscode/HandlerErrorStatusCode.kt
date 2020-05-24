@@ -1,4 +1,4 @@
-package br.com.angelorobson.whatsapplinkgenerator.utils.handlerstatuscode
+package br.com.angelorobson.whatsapplinkgenerator.ui.utils.handlerstatuscode
 
 import br.com.angelorobson.whatsapplinkgenerator.R
 

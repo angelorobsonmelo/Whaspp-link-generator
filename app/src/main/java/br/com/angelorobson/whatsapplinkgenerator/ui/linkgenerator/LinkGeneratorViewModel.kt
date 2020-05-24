@@ -1,9 +1,9 @@
-package br.com.angelorobson.whatsapplinkgenerator.linkgenerator
+package br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator
 
-import br.com.angelorobson.whatsapplinkgenerator.MobiusVM
+import br.com.angelorobson.whatsapplinkgenerator.ui.MobiusVM
 import br.com.angelorobson.whatsapplinkgenerator.model.repositories.CountryRepository
-import br.com.angelorobson.whatsapplinkgenerator.utils.HandlerErrorRemoteDataSource.validateStatusCode
-import br.com.angelorobson.whatsapplinkgenerator.utils.Navigator
+import br.com.angelorobson.whatsapplinkgenerator.ui.utils.HandlerErrorRemoteDataSource.validateStatusCode
+import br.com.angelorobson.whatsapplinkgenerator.ui.utils.Navigator
 import com.spotify.mobius.Next
 import com.spotify.mobius.Next.*
 import com.spotify.mobius.Update

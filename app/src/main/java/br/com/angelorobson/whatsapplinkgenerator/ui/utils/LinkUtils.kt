@@ -1,4 +1,4 @@
-package br.com.angelorobson.whatsapplinkgenerator.utils
+package br.com.angelorobson.whatsapplinkgenerator.ui.utils
 
 import android.app.Activity
 import android.content.ClipData
@@ -8,7 +8,7 @@ import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 import br.com.angelorobson.whatsapplinkgenerator.R
-import br.com.angelorobson.whatsapplinkgenerator.linkgenerator.LinkGeneratorResult
+import br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator.LinkGeneratorResult
 import java.text.MessageFormat
 
 

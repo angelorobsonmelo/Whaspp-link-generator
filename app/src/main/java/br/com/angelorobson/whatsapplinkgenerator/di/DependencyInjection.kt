@@ -5,12 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
 import br.com.angelorobson.whatsapplinkgenerator.R
-import br.com.angelorobson.whatsapplinkgenerator.linkgenerator.LinkGeneratorViewModel
+import br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator.LinkGeneratorViewModel
 import br.com.angelorobson.whatsapplinkgenerator.model.database.ApplicationDatabase
 import br.com.angelorobson.whatsapplinkgenerator.model.services.CountryService
-import br.com.angelorobson.whatsapplinkgenerator.utils.ActivityService
-import br.com.angelorobson.whatsapplinkgenerator.utils.IdlingResource
-import br.com.angelorobson.whatsapplinkgenerator.utils.Navigator
+import br.com.angelorobson.whatsapplinkgenerator.ui.utils.ActivityService
+import br.com.angelorobson.whatsapplinkgenerator.ui.utils.IdlingResource
+import br.com.angelorobson.whatsapplinkgenerator.ui.utils.Navigator
 import dagger.*
 import dagger.multibindings.IntoMap
 import okhttp3.OkHttpClient

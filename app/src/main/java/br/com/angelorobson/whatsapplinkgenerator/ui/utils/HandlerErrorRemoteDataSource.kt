@@ -1,6 +1,6 @@
-package br.com.angelorobson.whatsapplinkgenerator.utils
+package br.com.angelorobson.whatsapplinkgenerator.ui.utils
 
-import br.com.angelorobson.whatsapplinkgenerator.utils.handlerstatuscode.HandlerErrorStatusCode
+import br.com.angelorobson.whatsapplinkgenerator.ui.utils.handlerstatuscode.HandlerErrorStatusCode
 import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException

@@ -1,4 +1,4 @@
-package br.com.angelorobson.whatsapplinkgenerator.utils
+package br.com.angelorobson.whatsapplinkgenerator.ui.utils
 
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections

@@ -1,11 +1,12 @@
-package br.com.angelorobson.whatsapplinkgenerator
+package br.com.angelorobson.whatsapplinkgenerator.ui
 
 import android.content.Intent
 import android.content.Intent.*
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import br.com.angelorobson.whatsapplinkgenerator.utils.ActivityService
-import br.com.angelorobson.whatsapplinkgenerator.utils.WHAT_APP_RESULT_CODE
+import br.com.angelorobson.whatsapplinkgenerator.R
+import br.com.angelorobson.whatsapplinkgenerator.ui.utils.ActivityService
+import br.com.angelorobson.whatsapplinkgenerator.ui.utils.WHAT_APP_RESULT_CODE
 
 
 class Activity : AppCompatActivity() {

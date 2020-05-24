@@ -8,6 +8,6 @@
 
     <fragment
         android:id="@+id/linkGeneratorFragment"
-        android:name="br.com.angelorobson.whatsapplinkgenerator.linkgenerator.LinkGeneratorFragment"
+        android:name="br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator.LinkGeneratorFragment"
         android:label="LinkGeneratorFragment" />
 </navigation>

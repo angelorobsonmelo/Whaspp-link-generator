@@ -1,4 +1,4 @@
-package br.com.angelorobson.whatsapplinkgenerator.linkgenerator
+package br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator
 
 import android.view.View
 import android.widget.AdapterView
@@ -6,12 +6,12 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import br.com.angelorobson.whatsapplinkgenerator.R
-import br.com.angelorobson.whatsapplinkgenerator.getViewModel
-import br.com.angelorobson.whatsapplinkgenerator.utils.copyToClipBoard
-import br.com.angelorobson.whatsapplinkgenerator.utils.sendMessageToWhatsApp
-import br.com.angelorobson.whatsapplinkgenerator.linkgenerator.widgets.CountryAdapter
+import br.com.angelorobson.whatsapplinkgenerator.ui.getViewModel
+import br.com.angelorobson.whatsapplinkgenerator.ui.utils.copyToClipBoard
+import br.com.angelorobson.whatsapplinkgenerator.ui.utils.sendMessageToWhatsApp
+import br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator.widgets.CountryAdapter
 import br.com.angelorobson.whatsapplinkgenerator.model.domains.Country
-import br.com.angelorobson.whatsapplinkgenerator.utils.showToast
+import br.com.angelorobson.whatsapplinkgenerator.ui.utils.showToast
 import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable

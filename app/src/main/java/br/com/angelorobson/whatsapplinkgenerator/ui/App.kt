@@ -1,4 +1,4 @@
-package br.com.angelorobson.whatsapplinkgenerator
+package br.com.angelorobson.whatsapplinkgenerator.ui
 
 import android.app.Application
 import android.content.Context
@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import br.com.angelorobson.whatsapplinkgenerator.di.ApplicationComponent
 import br.com.angelorobson.whatsapplinkgenerator.di.DaggerRealComponent
 import kotlin.reflect.KClass
