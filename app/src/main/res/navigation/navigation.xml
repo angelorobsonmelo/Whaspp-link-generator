@@ -9,5 +9,15 @@
     <fragment
         android:id="@+id/linkGeneratorFragment"
         android:name="br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator.LinkGeneratorFragment"
-        android:label="LinkGeneratorFragment" />
+        android:label="LinkGeneratorFragment"
+        tools:layout="@layout/link_generator_fragment">
+        <action
+            android:id="@+id/history"
+            app:destination="@id/historyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="br.com.angelorobson.whatsapplinkgenerator.ui.history.HistoryFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" />
 </navigation>
