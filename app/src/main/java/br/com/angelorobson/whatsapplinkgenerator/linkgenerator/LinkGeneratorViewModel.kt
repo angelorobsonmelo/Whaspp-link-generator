@@ -10,6 +10,8 @@ import com.spotify.mobius.Update
 import com.spotify.mobius.rx2.RxMobius
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 
@@ -83,3 +85,10 @@ class LinkGeneratorViewModel @Inject constructor(
         }.build()
 
 )
+
+fun getNow(): String {
+    val format = SimpleDateFormat("YYYY-MM-DD HH:mm:ss", Locale("pt", "BR"))
+    return format.format(
+        Calendar.getInstance().time
+    )
+}

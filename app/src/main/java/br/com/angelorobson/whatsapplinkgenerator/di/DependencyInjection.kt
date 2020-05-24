@@ -3,10 +3,13 @@ package br.com.angelorobson.whatsapplinkgenerator.di
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.room.Room
 import br.com.angelorobson.whatsapplinkgenerator.R
 import br.com.angelorobson.whatsapplinkgenerator.linkgenerator.LinkGeneratorViewModel
+import br.com.angelorobson.whatsapplinkgenerator.model.database.ApplicationDatabase
 import br.com.angelorobson.whatsapplinkgenerator.model.services.CountryService
 import br.com.angelorobson.whatsapplinkgenerator.utils.ActivityService
+import br.com.angelorobson.whatsapplinkgenerator.utils.IdlingResource
 import br.com.angelorobson.whatsapplinkgenerator.utils.Navigator
 import dagger.*
 import dagger.multibindings.IntoMap
@@ -40,7 +43,7 @@ interface ApplicationComponent {
 }
 
 @Singleton
-@Component(modules = [ApplicationModule::class, ViewModelModule::class, ApiModule::class])
+@Component(modules = [ApplicationModule::class, ViewModelModule::class, ApiModule::class, DatabaseModule::class, RealModule::class])
 interface RealComponent : ApplicationComponent {
 
     @Component.Builder
@@ -125,4 +128,37 @@ object ApiModule {
         return retrofit.create(CountryService::class.java)
     }
 
+}
+
+@Module
+object DatabaseModule {
+
+    @Provides
+    @Singleton
+    @JvmStatic
+    fun applicationDatabase(context: Context): ApplicationDatabase {
+        return Room.databaseBuilder(
+            context,
+            ApplicationDatabase::class.java,
+            "send_whatsap_message_database"
+        )
+            .build()
+    }
+}
+
+@Module
+object RealModule {
+
+    @Provides
+    @Singleton
+    @JvmStatic
+    fun idlingResource(): IdlingResource = object : IdlingResource {
+        override fun increment() {}
+        override fun decrement() {}
+    }
+
+    @Provides
+    @Singleton
+    @JvmStatic
+    fun productDao(database: ApplicationDatabase) = database.historyDao()
 }
