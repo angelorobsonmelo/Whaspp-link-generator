@@ -26,6 +26,7 @@ ext {
     ioMockVersion = '1.8.7'
     roomVersion = '2.2.5'
     glideToVectorYouVersion = 'v2.0.0'
+    threetenabpVersion = '1.2.4'
 }
 
 allprojects {

@@ -11,6 +11,8 @@ data class HistoryEntity(
     val id: Int = 0,
     @ColumnInfo(name = "created_at")
     val createdAt: String,
+    @ColumnInfo(name = "phone_number")
+    val phoneNumber: String,
     val message: String,
     @Embedded val countryEntity: CountryEntity
 )

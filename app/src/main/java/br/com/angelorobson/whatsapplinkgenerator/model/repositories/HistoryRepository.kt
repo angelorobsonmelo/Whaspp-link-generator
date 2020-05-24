@@ -38,6 +38,7 @@ private fun mapToHistoryEntity(history: History): HistoryEntity {
     return HistoryEntity(
         createdAt = history.createdAt,
         message = history.message,
+        phoneNumber = history.phoneNumber,
         countryEntity = CountryEntity(
             countryFullName = country.countryFullName,
             countryShortName = country.countryShortName,
@@ -50,8 +51,10 @@ private fun mapToHistoryEntity(history: History): HistoryEntity {
 private fun mapToHistory(entity: HistoryEntity): History {
     val countryEntity = entity.countryEntity
     return History(
+        id = entity.id,
         createdAt = entity.createdAt,
         message = entity.message,
+        phoneNumber = entity.phoneNumber,
         country = Country(
             countryFullName = countryEntity.countryFullName,
             countryShortName = countryEntity.countryShortName,

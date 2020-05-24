@@ -16,6 +16,7 @@
 
 
     <string name="area_code" translatable="false">(+%1$s)</string>
+    <string name="area_code_number" translatable="false">(+%1$s) %2$s </string>
     <string name="area_code_formatted" translatable="false">+%1$s</string>
 
     <string name="whatApp_not_installed">WhatsApp not installed</string>
@@ -27,7 +28,5 @@
     <string name="share_via">Share by</string>
     <string name="copied">Copied</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

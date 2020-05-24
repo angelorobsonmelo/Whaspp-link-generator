@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import br.com.angelorobson.whatsapplinkgenerator.di.ApplicationComponent
 import br.com.angelorobson.whatsapplinkgenerator.di.DaggerRealComponent
+import com.jakewharton.threetenabp.AndroidThreeTen
 import kotlin.reflect.KClass
 
 class App : Application() {
@@ -16,6 +17,11 @@ class App : Application() {
         DaggerRealComponent.builder()
             .context(this)
             .build()
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        AndroidThreeTen.init(this)
     }
 }
 

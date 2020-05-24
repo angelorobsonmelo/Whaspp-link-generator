@@ -1,14 +1,11 @@
 package br.com.angelorobson.whatsapplinkgenerator.ui.history
 
-import br.com.angelorobson.whatsapplinkgenerator.model.repositories.CountryRepository
 import br.com.angelorobson.whatsapplinkgenerator.model.repositories.HistoryRepository
 import br.com.angelorobson.whatsapplinkgenerator.ui.MobiusVM
-import br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator.LinkGeneratorEffect
-import br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator.LinkGeneratorEvent
-import br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator.LinkGeneratorModel
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.Navigator
 import com.spotify.mobius.Next
-import com.spotify.mobius.Next.*
+import com.spotify.mobius.Next.dispatch
+import com.spotify.mobius.Next.next
 import com.spotify.mobius.Update
 import com.spotify.mobius.rx2.RxMobius
 import io.reactivex.android.schedulers.AndroidSchedulers
