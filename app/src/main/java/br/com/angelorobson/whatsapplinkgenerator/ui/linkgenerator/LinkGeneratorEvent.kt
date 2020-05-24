@@ -22,6 +22,6 @@ data class ButtonCopyClicked(
 
 data class CountriesLoaded(val countries: List<Country>) : LinkGeneratorEvent()
 
-data class CountriesApiException(val errorMessage: String) : LinkGeneratorEvent()
+data class CountriesException(val errorMessage: String) : LinkGeneratorEvent()
 
 object FormInvalid : LinkGeneratorEvent()

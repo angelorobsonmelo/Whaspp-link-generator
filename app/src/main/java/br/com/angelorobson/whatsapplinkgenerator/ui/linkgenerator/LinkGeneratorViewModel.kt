@@ -1,6 +1,5 @@
 package br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator
 
-import br.com.angelorobson.whatsapplinkgenerator.model.database.dao.HistoryDao
 import br.com.angelorobson.whatsapplinkgenerator.model.domains.History
 import br.com.angelorobson.whatsapplinkgenerator.ui.MobiusVM
 import br.com.angelorobson.whatsapplinkgenerator.model.repositories.CountryRepository
@@ -33,7 +32,7 @@ fun linkGeneratorUpdate(
                 )
             )
         )
-        is CountriesApiException -> next(
+        is CountriesException -> next(
             model.copy(
                 linkGeneratorResult = LinkGeneratorResult.Error(
                     errorMessage = event.errorMessage,
@@ -92,7 +91,7 @@ class LinkGeneratorViewModel @Inject constructor(
                     }
                     .doOnError {
                         val errorMessage = validateStatusCode(it)
-                        CountriesApiException(errorMessage)
+                        CountriesException(errorMessage)
                     }
             }
         }
@@ -102,10 +101,11 @@ class LinkGeneratorViewModel @Inject constructor(
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .toObservable<LinkGeneratorEvent>()
+                    .doOnError {
+                        CountriesException(it.localizedMessage)
+                    }
             }
-
         }
-
         .build()
 
 )
