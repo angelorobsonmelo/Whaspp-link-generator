@@ -5,10 +5,11 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import br.com.angelorobson.whatsapplinkgenerator.R
 import br.com.angelorobson.whatsapplinkgenerator.model.domains.History
+import br.com.angelorobson.whatsapplinkgenerator.ui.utils.extensions.DiffUtilCallback
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.history_row.*
@@ -17,9 +18,10 @@ import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.*
 
+private const val BR = "BR"
 
 class HistoryAdapter(private val activity: Activity) :
-    androidx.recyclerview.widget.ListAdapter<History, HistoryViewHolder>(DiffUtilCallback<History>()) {
+   ListAdapter<History, HistoryViewHolder>(DiffUtilCallback<History>()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
@@ -44,13 +46,6 @@ class HistoryAdapter(private val activity: Activity) :
 
 }
 
-class DiffUtilCallback<T> : DiffUtil.ItemCallback<T>() {
-
-    override fun areItemsTheSame(oldItem: T, newItem: T): Boolean = oldItem == newItem
-
-    override fun areContentsTheSame(oldItem: T, newItem: T): Boolean =
-        oldItem == newItem
-}
 
 class HistoryViewHolder(
     override val containerView: View,
@@ -70,7 +65,7 @@ class HistoryViewHolder(
 
             GlideToVectorYou.justLoadImage(activity, uri, ivFlag)
 
-            if (Locale.getDefault().country == "BR") {
+            if (Locale.getDefault().country == BR) {
                 val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
                 dateTimeFormatted = datetime.format(formatter)
             }

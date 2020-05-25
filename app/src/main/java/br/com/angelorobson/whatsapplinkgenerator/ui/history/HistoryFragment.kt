@@ -27,7 +27,6 @@ class HistoryFragment : Fragment(R.layout.fragment_history) {
             .subscribe { model ->
                 if (model.historyResult is HistoryResult.Loading) {
                     tvEmpty.isVisible = false
-
                     progress_horizontal.isVisible = model.historyResult.isLoading
                 }
                 if (model.historyResult is HistoryResult.HistoryLoaded) {
