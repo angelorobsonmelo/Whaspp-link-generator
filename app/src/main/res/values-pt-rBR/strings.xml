@@ -24,4 +24,7 @@
     <string name="whatApp_link">WhatsApp Link</string>
     <string name="copied">Copiado</string>
 
+    <string name="message_history">Histórico de Mensagens</string>
+
+
 </resources>

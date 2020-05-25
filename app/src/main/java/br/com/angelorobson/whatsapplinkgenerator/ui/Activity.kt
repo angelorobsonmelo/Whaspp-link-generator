@@ -1,24 +1,40 @@
 package br.com.angelorobson.whatsapplinkgenerator.ui
 
-import android.content.Intent
-import android.content.Intent.*
+
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
 import br.com.angelorobson.whatsapplinkgenerator.R
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.ActivityService
-import br.com.angelorobson.whatsapplinkgenerator.ui.utils.WHAT_APP_RESULT_CODE
+import kotlinx.android.synthetic.main.activity.*
 
 
 class Activity : AppCompatActivity() {
 
     private lateinit var activityService: ActivityService
-    var count = 0
+    private lateinit var navController: NavController
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity)
+        setupToolbar()
+
         activityService = applicationContext.component.activityService()
         activityService.onCreate(this)
+    }
+
+    private fun setupToolbar() {
+        setSupportActionBar(toolbar)
+
+        navController = findNavController(R.id.navigationHostFragment)
+        appBarConfiguration = AppBarConfiguration(navController.graph)
+
+        setupActionBarWithNavController(navController, appBarConfiguration)
     }
 
     override fun onDestroy() {
@@ -26,14 +42,9 @@ class Activity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    override fun startActivityForResult(intent: Intent?, requestCode: Int) {
-        super.startActivityForResult(intent, requestCode)
-        count++
-        if (requestCode == WHAT_APP_RESULT_CODE && count == 2) {
-            val i = Intent(this, Activity::class.java)
-            i.flags = FLAG_ACTIVITY_NO_HISTORY
-            startActivity(i)
-        }
-        println(requestCode)
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp(appBarConfiguration) || return super.onSupportNavigateUp()
+
     }
+
 }
