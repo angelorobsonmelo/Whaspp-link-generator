@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
+    tools:showIn="@layout/history_row"
     android:orientation="horizontal">
 
     <androidx.appcompat.widget.AppCompatImageView

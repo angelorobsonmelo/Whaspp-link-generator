@@ -5,18 +5,18 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import br.com.angelorobson.whatsapplinkgenerator.R
 import br.com.angelorobson.whatsapplinkgenerator.model.domains.History
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.history_row.*
+import kotlinx.android.synthetic.main.phone_content.*
 
 
 class HistoryAdapter(private val activity: Activity) :
-    androidx.recyclerview.widget.ListAdapter<History, HistoryViewHolder>(DiffUtilCallback()) {
+    androidx.recyclerview.widget.ListAdapter<History, HistoryViewHolder>(DiffUtilCallback<History>()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
@@ -41,11 +41,11 @@ class HistoryAdapter(private val activity: Activity) :
 
 }
 
-private class DiffUtilCallback : DiffUtil.ItemCallback<History>() {
+class DiffUtilCallback<T> : DiffUtil.ItemCallback<T>() {
 
-    override fun areItemsTheSame(oldItem: History, newItem: History): Boolean = oldItem == newItem
+    override fun areItemsTheSame(oldItem: T, newItem: T): Boolean = oldItem == newItem
 
-    override fun areContentsTheSame(oldItem: History, newItem: History): Boolean =
+    override fun areContentsTheSame(oldItem: T, newItem: T): Boolean =
         oldItem == newItem
 }
 
@@ -57,24 +57,17 @@ class HistoryViewHolder(
     fun bind(history: History) {
         with(itemView) {
             val country = history.country
-            val context = containerView.context
 
-            val imageFlag = findViewById<ImageView>(R.id.ivFlag)
-            val textViewCountryName = findViewById<TextView>(R.id.tvCountryName)
-            val textViewCodeArea = findViewById<TextView>(R.id.tvCountryCode)
-            val textViewDate = findViewById<TextView>(R.id.tvDate)
-            val textViewMessage = findViewById<TextView>(R.id.tvMessage)
+            val uri = Uri.parse(country.flag)
 
-            val uri =
-                Uri.parse(country.flag)
+            GlideToVectorYou.justLoadImage(activity, uri, ivFlag)
 
-            GlideToVectorYou.justLoadImage(activity, uri, imageFlag!!)
+            tvDate.text = history.createdAt
+            tvMessage.text = history.message
 
-            textViewDate.text = history.createdAt
-            textViewMessage.text = history.message
-
-            textViewCountryName?.text = country.countryShortName
-            textViewCodeArea?.text = context.getString(R.string.area_code_number, country.areaCode, history.phoneNumber)
+            tvCountryName.text = country.countryShortName
+            tvCountryCode.text =
+                context.getString(R.string.area_code_number, country.areaCode, history.phoneNumber)
         }
 
     }
