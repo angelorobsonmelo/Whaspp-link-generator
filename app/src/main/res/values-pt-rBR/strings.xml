@@ -26,5 +26,6 @@
 
     <string name="message_history">Histórico de Mensagens</string>
 
+    <string name="no_history">Sem História</string>
 
 </resources>

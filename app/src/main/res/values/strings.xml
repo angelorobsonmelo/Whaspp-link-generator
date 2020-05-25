@@ -30,7 +30,6 @@
 
     <string name="message_history">Message History</string>
 
-
-
+    <string name="no_history">No History</string>
 
 </resources>
