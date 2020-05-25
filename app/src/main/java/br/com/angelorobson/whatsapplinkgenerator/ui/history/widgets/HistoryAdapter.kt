@@ -13,6 +13,9 @@ import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.history_row.*
 import kotlinx.android.synthetic.main.phone_content.*
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.format.DateTimeFormatter
+import java.util.*
 
 
 class HistoryAdapter(private val activity: Activity) :
@@ -59,10 +62,21 @@ class HistoryViewHolder(
             val country = history.country
 
             val uri = Uri.parse(country.flag)
+            val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+            var dateTimeFormatted = ""
+
+            val datetime = LocalDateTime.parse(history.createdAt)
+            dateTimeFormatted = datetime.format(formatter)
 
             GlideToVectorYou.justLoadImage(activity, uri, ivFlag)
 
-            tvDate.text = history.createdAt
+            if (Locale.getDefault().country == "BR") {
+                val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
+                dateTimeFormatted = datetime.format(formatter)
+            }
+
+            tvDate.text = dateTimeFormatted
+
             tvMessage.text = history.message
 
             tvCountryName.text = country.countryShortName
