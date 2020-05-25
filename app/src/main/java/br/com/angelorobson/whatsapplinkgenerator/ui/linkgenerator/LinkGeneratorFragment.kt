@@ -1,10 +1,15 @@
 package br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator
 
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
 import br.com.angelorobson.whatsapplinkgenerator.R
 import br.com.angelorobson.whatsapplinkgenerator.ui.getViewModel
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.copyToClipBoard
@@ -27,6 +32,7 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
 
     override fun onStart() {
         super.onStart()
+        setHasOptionsMenu(true)
 
         disposable = Observable.mergeArray(
             btnSendMessage.clicks().map {
@@ -152,6 +158,18 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
 
         }
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.main_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return NavigationUI.onNavDestinationSelected(
+            item,
+            findNavController()
+        ) || super.onOptionsItemSelected(item)
     }
 
     override fun onDestroy() {

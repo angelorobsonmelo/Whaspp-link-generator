@@ -44,7 +44,6 @@ class Activity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp(appBarConfiguration) || return super.onSupportNavigateUp()
-
     }
 
 }
