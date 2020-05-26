@@ -4,8 +4,14 @@ import br.com.angelorobson.whatsapplinkgenerator.model.domains.History
 
 sealed class LinkGeneratorEffect
 
-object ObserveCountries : LinkGeneratorEffect()
+object ObserveCountriesEffect : LinkGeneratorEffect()
 
-data class SaveHistory(
+data class SaveHistoryEffect(
     val history: History
 ) : LinkGeneratorEffect()
+
+data class CopyToClipBoardEffect(
+    val countryCode: String = "",
+    val phoneNumber: String = "",
+    val message: String = ""
+): LinkGeneratorEffect()

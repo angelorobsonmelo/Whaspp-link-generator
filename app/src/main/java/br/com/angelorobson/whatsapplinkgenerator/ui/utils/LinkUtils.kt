@@ -14,7 +14,7 @@ import java.text.MessageFormat
 
 private const val link = "https://wa.me/{0}{1}?text={2}"
 
-fun sendMessageToWhatsApp(
+/*fun sendMessageToWhatsApp(
     info: LinkGeneratorResult.ContactInformationToSend,
     activity: Activity
 ) {
@@ -41,24 +41,4 @@ fun sendMessageToWhatsApp(
             ), activity
         )
     }
-}
-
-fun copyToClipBoard(
-    info: LinkGeneratorResult.ContactInformationToCopy,
-    activity: Activity?
-) {
-    val url = MessageFormat.format(link, info.countryCode, info.phoneNumber, info.message)
-    val clipboard =
-        activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    val clip: ClipData = ClipData.newPlainText("linkWhatsApp", url)
-
-    clipboard.setPrimaryClip(clip)
-}
-
-fun showToast(message: String, context: Context, duration: Int = Toast.LENGTH_SHORT) {
-    Toast.makeText(
-        context,
-        message,
-        duration
-    ).show()
-}
+}*/

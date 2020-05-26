@@ -12,11 +12,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import br.com.angelorobson.whatsapplinkgenerator.R
 import br.com.angelorobson.whatsapplinkgenerator.ui.getViewModel
-import br.com.angelorobson.whatsapplinkgenerator.ui.utils.copyToClipBoard
-import br.com.angelorobson.whatsapplinkgenerator.ui.utils.sendMessageToWhatsApp
 import br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator.widgets.CountryAdapter
 import br.com.angelorobson.whatsapplinkgenerator.model.domains.Country
-import br.com.angelorobson.whatsapplinkgenerator.ui.utils.showToast
 import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -30,7 +27,6 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
 
     private lateinit var disposable: Disposable
     private var countrySelected = Country()
-    private var buttonClickedEvent = false
     private var countries: ArrayList<Country> = arrayListOf()
     private lateinit var adapter: CountryAdapter
 
@@ -41,20 +37,10 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
 
         disposable = Observable.mergeArray(
             btnSendMessage.clicks().map {
-                if (isFormValid()) {
-                    buttonClickedEvent = true
-                    buttonSendClicked()
-                } else {
-                    FormInvalid
-                }
+                buttonSendClicked()
             },
             btnCopyLink.clicks().map {
-                if (isFormValid()) {
-                    buttonClickedEvent = true
-                    buttonCopyClicked()
-                } else {
-                    FormInvalid
-                }
+                buttonCopyClicked()
             }
         ).compose(getViewModel(LinkGeneratorViewModel::class).init(Initial))
             .subscribe { model ->
@@ -67,58 +53,14 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
                     countries.addAll(model.linkGeneratorResult.countries)
                     handleSpinner()
                 }
-                if (model.linkGeneratorResult is LinkGeneratorResult.ContactInformationToSend) {
-                    val contactInformation = model.linkGeneratorResult
-                    if (buttonClickedEvent) {
-                        buttonClickedEvent = false
-                        sendMessageToWhatsApp(contactInformation, requireActivity())
-                        return@subscribe
-                    }
-
-                    handleSpinner()
-                }
-                if (model.linkGeneratorResult is LinkGeneratorResult.ContactInformationToCopy) {
-                    val contactInformation = model.linkGeneratorResult
-                    if (buttonClickedEvent) {
-                        buttonClickedEvent = false
-                        copyToClipBoard(contactInformation, requireActivity())
-                        showToast(getString(R.string.copied), requireActivity())
-                        return@subscribe
-                    }
-                    handleSpinner()
-                }
                 if (model.linkGeneratorResult is LinkGeneratorResult.Error) {
                     progress_horizontal.isVisible = model.linkGeneratorResult.isLoading
-
-                    showToast(
-                        model.linkGeneratorResult.errorMessage, requireActivity(), Toast.LENGTH_LONG
-                    )
                 }
             }
     }
 
-    private fun isFormValid(): Boolean {
-        var valid = true
-        if (etRegionCode.text?.isEmpty()!!) {
-            etPhoneNumber.error = getString(R.string.empty_field)
-            valid = false
-        }
-
-        if (etPhoneNumber.text?.isEmpty()!!) {
-            etPhoneNumber.error = getString(R.string.empty_field)
-            valid = false
-        }
-
-        if (etTextMessage.text?.isEmpty()!! || etTextMessage.text?.isBlank()!!) {
-            etTextMessage.error = getString(R.string.empty_field)
-            valid = false
-        }
-
-        return valid
-    }
-
-    private fun buttonSendClicked(): ButtonSendClicked {
-        return ButtonSendClicked(
+    private fun buttonSendClicked(): ButtonSendClickedEvent {
+        return ButtonSendClickedEvent(
             countryCode = etRegionCode.text.toString(),
             phoneNumber = etPhoneNumber.text.toString(),
             message = etTextMessage.text.toString(),
@@ -126,8 +68,8 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
         )
     }
 
-    private fun buttonCopyClicked(): ButtonCopyClicked {
-        return ButtonCopyClicked(
+    private fun buttonCopyClicked(): ButtonCopyClickedEvent {
+        return ButtonCopyClickedEvent(
             countryCode = etRegionCode.text.toString(),
             phoneNumber = etPhoneNumber.text.toString(),
             message = etTextMessage.text.toString()

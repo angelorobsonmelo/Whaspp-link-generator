@@ -20,16 +20,4 @@ sealed class LinkGeneratorResult {
         val isLoading: Boolean = false
     ) : LinkGeneratorResult()
 
-    data class ContactInformationToSend(
-        val countryCode: String = "",
-        val phoneNumber: String = "",
-        val message: String = ""
-    ) : LinkGeneratorResult()
-
-    data class ContactInformationToCopy(
-        val countryCode: String = "",
-        val phoneNumber: String = "",
-        val message: String = ""
-    ) : LinkGeneratorResult()
-
 }
