@@ -98,7 +98,7 @@ dependencies {
     implementation "androidx.room:room-rxjava2:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
 
-    kapt "com.android.databinding:compiler:$dataBindingVersion"
+    kapt "com.android.databinding:compiler:$androidGradlePluginVersion"
 
 
     // Data Binding validator

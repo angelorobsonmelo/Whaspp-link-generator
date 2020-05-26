@@ -1,41 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="6dp"
-    app:cardElevation="6dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <data>
+
+        <variable
+            name="item"
+            type="br.com.angelorobson.whatsapplinkgenerator.model.domains.History" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp">
+        android:layout_margin="8dp"
+        app:cardCornerRadius="6dp"
+        app:cardElevation="6dp">
 
-        <TextView
-            android:id="@+id/tvDate"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:padding="1dp"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            tools:text="13/04/2020 15:16" />
+            android:orientation="vertical"
+            android:padding="8dp">
 
-        <include layout="@layout/phone_content" />
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:padding="1dp"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                app:convertDateTimeToString="@{item.createdAt}"
+                tools:text="13/04/2020 15:16" />
 
-        <TextView
-            android:id="@+id/tvMessage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:padding="1dp"
-            android:textColor="@android:color/black"
-            tools:text="Loren ups" />
+            <include
+                app:secondaryItem="@{item}"
+                layout="@layout/phone_content" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tvMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:padding="1dp"
+                android:text="@{item.message}"
+                android:textColor="@android:color/black"
+                tools:text="Loren ups" />
 
-</com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>
+
 

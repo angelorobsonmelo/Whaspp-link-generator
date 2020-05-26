@@ -2,7 +2,6 @@ package br.com.angelorobson.whatsapplinkgenerator.ui.utils
 
 import android.view.View
 import android.view.View.*
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import br.com.angelorobson.whatsapplinkgenerator.R
@@ -10,7 +9,13 @@ import br.com.angelorobson.whatsapplinkgenerator.ui.utils.extensions.convertDate
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.extensions.convertDateToStringDDMMM
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.extensions.formatToServerDateTimeDefaults
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.extensions.formatToViewDateTimeDefaults
+import kotlinx.android.synthetic.main.history_row.*
+import kotlinx.android.synthetic.main.phone_content.*
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.format.DateTimeFormatter
 import java.util.*
+
+private const val BR = "BR"
 
 
 @BindingAdapter("date")
@@ -33,10 +38,31 @@ fun convertFormatToViewDateTimeDefaults(textView: TextView, date: Date) {
     textView.text = date.formatToViewDateTimeDefaults()
 }
 
+@BindingAdapter("convertDateTimeToString")
+fun convertDateTimeToString(textView: TextView, dateTimeString: String?) {
+    val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+    var dateTimeFormatted = ""
+
+    val datetime = LocalDateTime.parse(dateTimeString)
+    dateTimeFormatted = datetime.format(formatter)
+
+    if (Locale.getDefault().country == BR) {
+        val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
+        dateTimeFormatted = datetime.format(formatter)
+    }
+
+    textView.text = dateTimeFormatted
+}
+
 @BindingAdapter("finalDate")
 fun convertFinalDateToString(textView: TextView, finalDate: Date) {
 
     textView.text = finalDate.convertDateToStringDDMMM()
+}
+
+@BindingAdapter(value = ["areaCode", "phoneNumber"])
+fun countryCodeAndPhoneNumber(textView: TextView, areaCode: String?, phoneNumber: String?) {
+    textView.text = textView.context.getString(R.string.area_code_number, areaCode, phoneNumber)
 }
 
 

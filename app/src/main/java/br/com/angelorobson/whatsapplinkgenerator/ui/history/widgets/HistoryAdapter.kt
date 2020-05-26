@@ -5,32 +5,34 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import br.com.angelorobson.whatsapplinkgenerator.R
+import br.com.angelorobson.whatsapplinkgenerator.databinding.HistoryRowBinding
 import br.com.angelorobson.whatsapplinkgenerator.model.domains.History
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.extensions.DiffUtilCallback
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.history_row.*
 import kotlinx.android.synthetic.main.phone_content.*
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.format.DateTimeFormatter
-import java.util.*
 
-private const val BR = "BR"
 
 class HistoryAdapter(private val activity: Activity) :
-   ListAdapter<History, HistoryViewHolder>(DiffUtilCallback<History>()) {
+    ListAdapter<History, HistoryViewHolder>(DiffUtilCallback<History>()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(
+            viewType,
+            parent,
+            false
+        )
+
+        val binding = DataBindingUtil.bind<HistoryRowBinding>(view)
+
         return HistoryViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                viewType,
-                parent,
-                false
-            ),
+            view,
+            binding,
             activity
         )
     }
@@ -49,35 +51,19 @@ class HistoryAdapter(private val activity: Activity) :
 
 class HistoryViewHolder(
     override val containerView: View,
+    private val binding: HistoryRowBinding?,
     private val activity: Activity
 ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     fun bind(history: History) {
-        with(itemView) {
-            val country = history.country
-
-            val uri = Uri.parse(country.flag)
-            val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
-            var dateTimeFormatted = ""
-
-            val datetime = LocalDateTime.parse(history.createdAt)
-            dateTimeFormatted = datetime.format(formatter)
-
-            GlideToVectorYou.justLoadImage(activity, uri, ivFlag)
-
-            if (Locale.getDefault().country == BR) {
-                val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
-                dateTimeFormatted = datetime.format(formatter)
-            }
-
-            tvDate.text = dateTimeFormatted
-
-            tvMessage.text = history.message
-
-            tvCountryName.text = country.countryShortName
-            tvCountryCode.text =
-                context.getString(R.string.area_code_number, country.areaCode, history.phoneNumber)
+        binding?.apply {
+            item = history
+            executePendingBindings()
         }
+        val country = history.country
+        val uri = Uri.parse(country.flag)
+
+        GlideToVectorYou.justLoadImage(activity, uri, ivFlag)
 
     }
 }

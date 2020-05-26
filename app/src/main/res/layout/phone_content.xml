@@ -1,36 +1,50 @@
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    tools:showIn="@layout/history_row"
-    android:orientation="horizontal">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivFlag"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:scaleType="centerInside"
-        tools:src="@android:drawable/alert_dark_frame" />
+    <data>
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvCountryName"
-        android:layout_width="wrap_content"
+        <variable
+            name="secondaryItem"
+            type="br.com.angelorobson.whatsapplinkgenerator.model.domains.History" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:textColor="@android:color/black"
-        tools:text="BR" />
+        android:layout_margin="8dp"
+        android:orientation="horizontal"
+        tools:showIn="@layout/history_row">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvCountryCode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textColor="@android:color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/ivFlag"
-        app:layout_constraintTop_toTopOf="@id/ivFlag"
-        tools:text="(+55) 82991228122" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivFlag"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:scaleType="centerInside"
+            tools:src="@android:drawable/alert_dark_frame" />
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvCountryName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@{secondaryItem.country.countryShortName}"
+            android:textColor="@android:color/black"
+            tools:text="BR" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvCountryCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="@android:color/black"
+            app:areaCode="@{secondaryItem.country.areaCode}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ivFlag"
+            app:layout_constraintTop_toTopOf="@id/ivFlag"
+            app:phoneNumber="@{secondaryItem.phoneNumber}"
+            tools:text="(+55) 82991228122" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</layout>
