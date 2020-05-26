@@ -19,7 +19,10 @@ import com.spotify.mobius.Next
 import com.spotify.mobius.Next.*
 import com.spotify.mobius.Update
 import com.spotify.mobius.rx2.RxMobius
-import io.reactivex.*
+import io.reactivex.Completable
+import io.reactivex.CompletableSource
+import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.threeten.bp.LocalDateTime
@@ -116,12 +119,17 @@ class LinkGeneratorViewModel @Inject constructor(
                 historyRepository.saveHistory(effect.history)
                     .subscribeOn(Schedulers.newThread())
                     .toObservable<LinkGeneratorEvent>()
-                    .doOnComplete {
-                        sendMessageToWhatsApp(activityService.activity, effect.history)
+                    .compose {
+                        Observable.create<LinkGeneratorEvent> { emitter ->
+                            emitter.onNext(SendMessageToWhatsAppEvent(effect.history))
+                        }.doOnError {
+                            CountriesExceptionEvent(it.localizedMessage)
+                        }
                     }
                     .doOnError {
                         CountriesExceptionEvent(it.localizedMessage)
                     }
+
             }
         }
         .addTransformer(CopyToClipBoardEffect::class.java) { upstream ->
@@ -136,18 +144,17 @@ class LinkGeneratorViewModel @Inject constructor(
                         CountriesExceptionEvent(it.localizedMessage)
                     }
             }
+        }.addTransformer(SendMessageToWhatsAppEffect::class.java) { upstream ->
+            upstream.switchMap { effect ->
+                sendMessageToWhatsApp(
+                    activityService.activity,
+                    effect.history
+                ).toObservable<LinkGeneratorEvent>()
+                    .doOnError {
+                        CountriesExceptionEvent(it.localizedMessage)
+                    }
+            }
         }
-//        }.addTransformer(SendMessageToWhatsAppEffect::class.java) { upstream ->
-//            upstream.switchMap { effect ->
-//                sendMessageToWhatsApp(
-//                    activityService.activity,
-//                    effect.history
-//                ).toObservable<LinkGeneratorEvent>()
-//                    .doOnError {
-//                        CountriesExceptionEvent(it.localizedMessage)
-//                    }
-//            }
-//        }
         .build()
 
 )
@@ -180,37 +187,29 @@ fun copyToClipBoard(
 fun sendMessageToWhatsApp(
     activity: Activity,
     history: History
-) {
-    try {
-        val packageManager = activity.packageManager
-        val i = Intent(Intent.ACTION_VIEW)
-        val url = MessageFormat.format(
-            link,
-            history.country.areaCode,
-            history.phoneNumber,
-            history.message
-        )
+): Completable {
+    return Single.fromCallable { history }
+        .flatMapCompletable {
+            try {
+                val packageManager = activity.packageManager
+                val i = Intent(Intent.ACTION_VIEW)
+                val url =
+                    MessageFormat.format(link, it.country.areaCode, it.phoneNumber, it.message)
 
-        i.setPackage("com.whatsapp")
-        i.data = Uri.parse(url)
-        if (i.resolveActivity(packageManager) != null) {
-            activity.startActivity(i)
-        } else {
-            showToast(
-                activity.getString(
-                    R.string.whatApp_not_installed
-                ), activity
-            )
+                i.setPackage("com.whatsapp")
+                i.data = Uri.parse(url)
+                if (i.resolveActivity(packageManager) != null) {
+                    activity.startActivity(i)
+                } else {
+                    showToast(activity.getString(R.string.whatApp_not_installed), activity)
+                }
+            } catch (e: Exception) {
+                showToast(activity.getString(R.string.whatApp_not_installed), activity)
+            }
+            CompletableSource { completableObserver ->
+                completableObserver.onComplete()
+            }
         }
-    } catch (e: Exception) {
-        showToast(
-            activity.getString(
-                R.string.whatApp_not_installed
-            ), activity
-        )
-    }
-
-
 }
 
 
