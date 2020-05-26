@@ -56,7 +56,6 @@ fun convertDateTimeToString(textView: TextView, dateTimeString: String?) {
 
 @BindingAdapter("finalDate")
 fun convertFinalDateToString(textView: TextView, finalDate: Date) {
-
     textView.text = finalDate.convertDateToStringDDMMM()
 }
 
@@ -64,17 +63,6 @@ fun convertFinalDateToString(textView: TextView, finalDate: Date) {
 fun countryCodeAndPhoneNumber(textView: TextView, areaCode: String?, phoneNumber: String?) {
     textView.text = textView.context.getString(R.string.area_code_number, areaCode, phoneNumber)
 }
-
-
-/*@BindingAdapter("bind:areaCode", "bind:phoneNumber")
-fun areaCodeAndNumber(
-    areaCode: String?,
-    phoneNumber: String?,
-    textView: TextView
-) {
-    textView.text = textView.context.getString(R.string.area_code_number, areaCode, phoneNumber)
-
-}*/
 
 @BindingAdapter("areaCode")
 fun areaCode(

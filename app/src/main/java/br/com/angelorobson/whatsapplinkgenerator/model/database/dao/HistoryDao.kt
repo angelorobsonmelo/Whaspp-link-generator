@@ -10,7 +10,7 @@ import io.reactivex.Observable
 @Dao
 abstract class HistoryDao {
 
-    @Query("SELECT * FROM HistoryEntity")
+    @Query("SELECT * FROM HistoryEntity ORDER BY id DESC")
     abstract fun getAll(): Observable<List<HistoryEntity>>
 
     @Insert

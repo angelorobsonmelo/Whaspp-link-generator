@@ -48,8 +48,8 @@ class HistoryViewModel @Inject constructor(
                 repository.getAll()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .map {
-                        HistoryLoadedEvent(it)
+                    .map { histories ->
+                        HistoryLoadedEvent(histories)
                     }
                     .doOnError {
                         HistoryExceptionEvent(it.localizedMessage)
