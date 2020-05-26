@@ -4,10 +4,10 @@ import br.com.angelorobson.whatsapplinkgenerator.model.domains.History
 
 sealed class HistoryEvent
 
-object Initial : HistoryEvent()
+object InitialEvent : HistoryEvent()
 
-data class HistoryLoaded(
+data class HistoryLoadedEvent(
     val histories: List<History>
 ) : HistoryEvent()
 
-data class HistoryException(val errorMessage: String) : HistoryEvent()
+data class HistoryExceptionEvent(val errorMessage: String) : HistoryEvent()

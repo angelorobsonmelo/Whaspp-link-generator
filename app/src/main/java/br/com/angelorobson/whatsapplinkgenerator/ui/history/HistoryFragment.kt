@@ -23,7 +23,7 @@ class HistoryFragment : Fragment(R.layout.fragment_history) {
         recyclerView.adapter = adapter
 
         disposable = Observable.empty<HistoryEvent>()
-            .compose(getViewModel(HistoryViewModel::class).init(Initial))
+            .compose(getViewModel(HistoryViewModel::class).init(InitialEvent))
             .subscribe { model ->
                 if (model.historyResult is HistoryResult.Loading) {
                     tvEmpty.isVisible = false

@@ -17,15 +17,15 @@ fun historyUpdate(
     event: HistoryEvent
 ): Next<HistoryModel, HistoryEffect> {
     return when (event) {
-        Initial -> dispatch(setOf(ObserverHistories))
-        is HistoryLoaded -> next(
+        InitialEvent -> dispatch(setOf(ObserverHistoriesEffect))
+        is HistoryLoadedEvent -> next(
             model.copy(
                 historyResult = HistoryResult.HistoryLoaded(
                     histories = event.histories
                 )
             )
         )
-        is HistoryException -> next(
+        is HistoryExceptionEvent -> next(
             model.copy(
                 historyResult = HistoryResult.Error(
                     errorMessage = event.errorMessage
@@ -43,16 +43,16 @@ class HistoryViewModel @Inject constructor(
     Update(::historyUpdate),
     HistoryModel(),
     RxMobius.subtypeEffectHandler<HistoryEffect, HistoryEvent>()
-        .addTransformer(ObserverHistories::class.java) { upstream ->
+        .addTransformer(ObserverHistoriesEffect::class.java) { upstream ->
             upstream.switchMap {
                 repository.getAll()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .map {
-                        HistoryLoaded(it)
+                        HistoryLoadedEvent(it)
                     }
                     .doOnError {
-                        HistoryException(it.localizedMessage)
+                        HistoryExceptionEvent(it.localizedMessage)
                     }
             }
         }.build()
