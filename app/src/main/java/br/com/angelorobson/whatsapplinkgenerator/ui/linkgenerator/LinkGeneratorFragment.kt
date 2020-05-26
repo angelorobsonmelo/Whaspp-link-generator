@@ -1,12 +1,13 @@
 package br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator
 
+import android.content.Context
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import br.com.angelorobson.whatsapplinkgenerator.R
@@ -141,10 +142,17 @@ class LinkGeneratorFragment : BindingFragment<LinkGeneratorFragmentBinding>() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        hideKeyBoard()
         return NavigationUI.onNavDestinationSelected(
             item,
             findNavController()
         ) || super.onOptionsItemSelected(item)
+    }
+
+    private fun hideKeyBoard() {
+        val im = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        im.hideSoftInputFromWindow(etPhoneNumber.windowToken, 0)
+        im.hideSoftInputFromWindow(etTextMessage.windowToken, 0)
     }
 
     override fun onDestroy() {
