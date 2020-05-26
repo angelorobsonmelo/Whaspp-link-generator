@@ -22,6 +22,7 @@ import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.link_generator_fragment.*
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
@@ -29,14 +30,19 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
 
     private lateinit var disposable: Disposable
     private var countrySelected = Country()
+    private var buttonClickedEvent = false
+    private var countries: ArrayList<Country> = arrayListOf()
+    private lateinit var adapter: CountryAdapter
 
     override fun onStart() {
         super.onStart()
         setHasOptionsMenu(true)
+        adapter = CountryAdapter(requireActivity(), countries)
 
         disposable = Observable.mergeArray(
             btnSendMessage.clicks().map {
                 if (isFormValid()) {
+                    buttonClickedEvent = true
                     buttonSendClicked()
                 } else {
                     FormInvalid
@@ -44,6 +50,7 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
             },
             btnCopyLink.clicks().map {
                 if (isFormValid()) {
+                    buttonClickedEvent = true
                     buttonCopyClicked()
                 } else {
                     FormInvalid
@@ -57,30 +64,34 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
 
                 if (model.linkGeneratorResult is LinkGeneratorResult.CountriesLoaded) {
                     progress_horizontal.isVisible = model.linkGeneratorResult.isLoading
-
-                    handleSpinner(model.linkGeneratorResult.countries)
+                    countries.addAll(model.linkGeneratorResult.countries)
+                    handleSpinner()
                 }
                 if (model.linkGeneratorResult is LinkGeneratorResult.ContactInformationToSend) {
                     val contactInformation = model.linkGeneratorResult
-                    sendMessageToWhatsApp(
-                        contactInformation,
-                        requireActivity()
-                    )
+                    if (buttonClickedEvent) {
+                        buttonClickedEvent = false
+                        sendMessageToWhatsApp(contactInformation, requireActivity())
+                        return@subscribe
+                    }
+
+                    handleSpinner()
                 }
                 if (model.linkGeneratorResult is LinkGeneratorResult.ContactInformationToCopy) {
                     val contactInformation = model.linkGeneratorResult
-                    copyToClipBoard(
-                        contactInformation,
-                        requireActivity()
-                    )
+                    if (buttonClickedEvent) {
+                        buttonClickedEvent = false
+                        copyToClipBoard(contactInformation, requireActivity())
+                        showToast(getString(R.string.copied), requireActivity())
+                        return@subscribe
+                    }
+                    handleSpinner()
                 }
                 if (model.linkGeneratorResult is LinkGeneratorResult.Error) {
                     progress_horizontal.isVisible = model.linkGeneratorResult.isLoading
 
                     showToast(
-                        model.linkGeneratorResult.errorMessage,
-                        requireActivity(),
-                        Toast.LENGTH_LONG
+                        model.linkGeneratorResult.errorMessage, requireActivity(), Toast.LENGTH_LONG
                     )
                 }
             }
@@ -108,39 +119,40 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
 
     private fun buttonSendClicked(): ButtonSendClicked {
         return ButtonSendClicked(
-            etRegionCode.text.toString(),
-            etPhoneNumber.text.toString(),
-            etTextMessage.text.toString(),
-            countrySelected
+            countryCode = etRegionCode.text.toString(),
+            phoneNumber = etPhoneNumber.text.toString(),
+            message = etTextMessage.text.toString(),
+            country = countrySelected
         )
     }
 
     private fun buttonCopyClicked(): ButtonCopyClicked {
         return ButtonCopyClicked(
-            etRegionCode.text.toString(),
-            etPhoneNumber.text.toString(),
-            etTextMessage.text.toString()
+            countryCode = etRegionCode.text.toString(),
+            phoneNumber = etPhoneNumber.text.toString(),
+            message = etTextMessage.text.toString()
         )
     }
 
-    private fun handleSpinner(countries: List<Country>) {
-        val adapter =
-            CountryAdapter(requireActivity(), countries)
+    private fun handleSpinner() {
         spinnerCountryCode.adapter = adapter
+        adapter.notifyDataSetChanged()
 
         val countryShortName = Locale.getDefault().country
+        val positionToBeSelected: Int
 
-        val position = adapter.getPosition(
-            countries.filter {
-                it.countryShortName == countryShortName
-            }[0]
-        )
+        positionToBeSelected = getItemPositionItemToBeSelected(countryShortName)
 
-        spinnerCountryCode.setSelection(position)
+        spinnerCountryCode.setSelection(positionToBeSelected)
 
-        val areaCode = getString(R.string.area_code_formatted, countries[position].areaCode)
+        val areaCode =
+            getString(R.string.area_code_formatted, countries[positionToBeSelected].areaCode)
         etRegionCode.setText(areaCode)
 
+        handleItemSelected()
+    }
+
+    private fun handleItemSelected() {
         spinnerCountryCode.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
 
@@ -157,7 +169,22 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
             }
 
         }
+    }
 
+    private fun getItemPositionItemToBeSelected(countryShortName: String): Int {
+        return if (countrySelected.countryShortName.isNotEmpty()) {
+            adapter.getPosition(
+                countries.filter {
+                    it.countryShortName == countrySelected.countryShortName
+                }[0]
+            )
+        } else {
+            adapter.getPosition(
+                countries.filter {
+                    it.countryShortName == countryShortName
+                }[0]
+            )
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -176,4 +203,5 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
         super.onDestroy()
         disposable.dispose()
     }
+
 }

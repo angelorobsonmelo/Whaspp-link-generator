@@ -53,11 +53,6 @@ fun copyToClipBoard(
     val clip: ClipData = ClipData.newPlainText("linkWhatsApp", url)
 
     clipboard.setPrimaryClip(clip)
-    showToast(
-        activity.getString(
-            R.string.copied
-        ), activity
-    )
 }
 
 fun showToast(message: String, context: Context, duration: Int = Toast.LENGTH_SHORT) {
