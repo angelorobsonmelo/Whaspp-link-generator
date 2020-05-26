@@ -138,9 +138,7 @@ class LinkGeneratorViewModel @Inject constructor(
                         CountriesExceptionEvent(it.localizedMessage)
                     }
             }
-        }
-
-        .build()
+        }.build()
 
 )
 

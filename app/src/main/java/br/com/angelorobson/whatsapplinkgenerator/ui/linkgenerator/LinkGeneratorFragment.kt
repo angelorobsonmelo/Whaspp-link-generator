@@ -5,27 +5,25 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import br.com.angelorobson.whatsapplinkgenerator.R
+import br.com.angelorobson.whatsapplinkgenerator.model.domains.Country
 import br.com.angelorobson.whatsapplinkgenerator.ui.getViewModel
 import br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator.widgets.CountryAdapter
-import br.com.angelorobson.whatsapplinkgenerator.model.domains.Country
 import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.link_generator_fragment.*
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
 
 
-    private lateinit var disposable: Disposable
+    private val compositeDisposable = CompositeDisposable()
     private var countrySelected = Country()
     private var countries: ArrayList<Country> = arrayListOf()
     private lateinit var adapter: CountryAdapter
@@ -35,12 +33,21 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
         setHasOptionsMenu(true)
         adapter = CountryAdapter(requireActivity(), countries)
 
-        disposable = Observable.mergeArray(
+        val disposable = Observable.mergeArray(
             btnSendMessage.clicks().map {
-                buttonSendClicked()
+                ButtonSendClickedEvent(
+                    countryCode = etRegionCode.text.toString(),
+                    phoneNumber = etPhoneNumber.text.toString(),
+                    message = etTextMessage.text.toString(),
+                    country = countrySelected
+                )
             },
             btnCopyLink.clicks().map {
-                buttonCopyClicked()
+                ButtonCopyClickedEvent(
+                    countryCode = etRegionCode.text.toString(),
+                    phoneNumber = etPhoneNumber.text.toString(),
+                    message = etTextMessage.text.toString()
+                )
             }
         ).compose(getViewModel(LinkGeneratorViewModel::class).init(Initial))
             .subscribe { model ->
@@ -57,23 +64,8 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
                     progress_horizontal.isVisible = model.linkGeneratorResult.isLoading
                 }
             }
-    }
 
-    private fun buttonSendClicked(): ButtonSendClickedEvent {
-        return ButtonSendClickedEvent(
-            countryCode = etRegionCode.text.toString(),
-            phoneNumber = etPhoneNumber.text.toString(),
-            message = etTextMessage.text.toString(),
-            country = countrySelected
-        )
-    }
-
-    private fun buttonCopyClicked(): ButtonCopyClickedEvent {
-        return ButtonCopyClickedEvent(
-            countryCode = etRegionCode.text.toString(),
-            phoneNumber = etPhoneNumber.text.toString(),
-            message = etTextMessage.text.toString()
-        )
+        compositeDisposable.add(disposable)
     }
 
     private fun handleSpinner() {
@@ -143,7 +135,7 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
 
     override fun onDestroy() {
         super.onDestroy()
-        disposable.dispose()
+        compositeDisposable.clear()
     }
 
 }
