@@ -1,36 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="16dp"
-    android:orientation="horizontal">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvCountryCode"
-        android:layout_width="wrap_content"
+    <data>
+
+        <variable
+            name="country"
+            type="br.com.angelorobson.whatsapplinkgenerator.model.domains.view.CountryItem" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/ivFlag"
-        app:layout_constraintTop_toTopOf="@id/ivFlag"
-        tools:text="(+25458)" />
+        android:orientation="horizontal"
+        android:padding="16dp">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvCountryName"
-        android:layout_width="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
-        tools:text="BR" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvCountryCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            app:areaCode="@{country.areaCode}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ivFlag"
+            app:layout_constraintTop_toTopOf="@id/ivFlag"
+            tools:text="(+25458)" />
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivFlag"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="4dp"
-        android:scaleType="centerInside"
-        tools:src="@android:drawable/alert_dark_frame" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvCountryName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@{country.countryShortName}"
+            android:textColor="@android:color/black"
+            tools:text="BR" />
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivFlag"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="4dp"
+            android:scaleType="centerInside"
+            tools:src="@android:drawable/alert_dark_frame" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</layout>

@@ -8,8 +8,12 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil.*
 import br.com.angelorobson.whatsapplinkgenerator.R
+import br.com.angelorobson.whatsapplinkgenerator.databinding.CountrySpinnerRowBinding
 import br.com.angelorobson.whatsapplinkgenerator.model.domains.Country
+import br.com.angelorobson.whatsapplinkgenerator.model.domains.view.CountryItem
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 
 class CountryAdapter(private val activity: Activity, countries: List<Country>) :
@@ -30,21 +34,21 @@ class CountryAdapter(private val activity: Activity, countries: List<Country>) :
                 R.layout.country_spinner_row, parent, false
             )
         }
-
-        val imageFlag = converterV?.findViewById<ImageView>(R.id.ivFlag)
-        val textViewCountryName = converterV?.findViewById<TextView>(R.id.tvCountryName)
-        val textViewCodeArea = converterV?.findViewById<TextView>(R.id.tvCountryCode)
-
         val country = getItem(position)
+        val binding = bind<CountrySpinnerRowBinding>(converterV!!)
+
+        binding?.country = CountryItem(
+            areaCode = country?.areaCode ?: "",
+            countryShortName = country?.countryShortName ?: ""
+        )
+
+        val imageFlag = binding?.ivFlag
 
         val uri =
             Uri.parse(country?.flag)
 
         GlideToVectorYou.justLoadImage(activity, uri, imageFlag!!)
 
-        textViewCountryName?.text = country?.countryShortName
-        textViewCodeArea?.text = activity.getString(R.string.area_code, country?.areaCode)
-
-        return converterV!!
+        return binding.root
     }
 }
