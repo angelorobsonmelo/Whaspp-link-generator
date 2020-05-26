@@ -14,4 +14,8 @@ data class CopyToClipBoardEffect(
     val countryCode: String = "",
     val phoneNumber: String = "",
     val message: String = ""
-): LinkGeneratorEffect()
+) : LinkGeneratorEffect()
+
+data class SendMessageToWhatsAppEffect(
+    val history: History
+) : LinkGeneratorEffect()

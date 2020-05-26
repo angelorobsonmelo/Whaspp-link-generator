@@ -24,6 +24,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    dataBinding {
+        enabled true
+    }
+
     kotlinOptions {
         jvmTarget = "1.8"
     }
@@ -93,6 +97,11 @@ dependencies {
     implementation "androidx.room:room-ktx:$roomVersion"
     implementation "androidx.room:room-rxjava2:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
+
+    kapt "com.android.databinding:compiler:$dataBindingVersion"
+
+    // Data Binding validator
+    implementation "com.github.Ilhasoft:data-binding-validator:$dataBindingValidator"
 
     androidTestImplementation "androidx.test:runner:$testRunnerVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"

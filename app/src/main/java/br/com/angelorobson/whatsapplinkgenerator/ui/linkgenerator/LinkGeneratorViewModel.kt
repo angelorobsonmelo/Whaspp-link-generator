@@ -1,10 +1,14 @@
 package br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator
 
+import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
 import br.com.angelorobson.whatsapplinkgenerator.R
+import br.com.angelorobson.whatsapplinkgenerator.model.domains.History
 import br.com.angelorobson.whatsapplinkgenerator.model.repositories.CountryRepository
 import br.com.angelorobson.whatsapplinkgenerator.model.repositories.HistoryRepository
 import br.com.angelorobson.whatsapplinkgenerator.ui.MobiusVM
@@ -15,9 +19,7 @@ import com.spotify.mobius.Next
 import com.spotify.mobius.Next.*
 import com.spotify.mobius.Update
 import com.spotify.mobius.rx2.RxMobius
-import io.reactivex.Completable
-import io.reactivex.CompletableSource
-import io.reactivex.Single
+import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.threeten.bp.LocalDateTime
@@ -49,44 +51,38 @@ fun linkGeneratorUpdate(
             )
         )
         FormInvalidEvent -> noChange()
-        /*  is ButtonSendClicked -> next(
-              model.copy(
-                  linkGeneratorResult = LinkGeneratorResult.ContactInformationToSend(
-                      countryCode = event.countryCode,
-                      phoneNumber = event.phoneNumber,
-                      message = event.message
-                  )
-              ),
-              setOf(
-                  SaveHistory(
-                      History(
-                          createdAt = getNow(),
-                          country = event.country,
-                          message = event.message,
-                          phoneNumber = event.phoneNumber
-                      )
-                  )
-              )
-          )
-          is ButtonCopyClicked -> next(
-              model.copy(
-                  linkGeneratorResult = LinkGeneratorResult.ContactInformationToCopy(
-                      countryCode = event.countryCode,
-                      phoneNumber = event.phoneNumber,
-                      message = event.message
-                  )
-              )
-          )*/
-        is ButtonSendClickedEvent -> noChange()
-        is ButtonCopyClickedEvent -> dispatch(
-            setOf(
-                CopyToClipBoardEffect(
-                    countryCode = event.countryCode,
-                    phoneNumber = event.phoneNumber,
-                    message = event.message
+        is ButtonSendClickedEvent ->
+            if (event.isFormValid) {
+                dispatch<LinkGeneratorModel, LinkGeneratorEffect>(
+                    setOf(
+                        SaveHistoryEffect(
+                            history = History(
+                                createdAt = getNow(),
+                                country = event.country,
+                                message = event.message,
+                                phoneNumber = event.phoneNumber
+                            )
+                        )
+                    )
                 )
-            )
-        )
+            } else {
+                noChange()
+            }
+        is ButtonCopyClickedEvent ->
+            if (event.isFormValid) {
+                dispatch<LinkGeneratorModel, LinkGeneratorEffect>(
+                    setOf(
+                        CopyToClipBoardEffect(
+                            countryCode = event.countryCode,
+                            phoneNumber = event.phoneNumber,
+                            message = event.message
+                        )
+                    )
+                )
+            } else {
+                noChange()
+            }
+        is SendMessageToWhatsAppEvent -> dispatch(setOf(SendMessageToWhatsAppEffect(event.history)))
     }
 }
 
@@ -118,9 +114,11 @@ class LinkGeneratorViewModel @Inject constructor(
         .addTransformer(SaveHistoryEffect::class.java) { upstream ->
             upstream.switchMap { effect ->
                 historyRepository.saveHistory(effect.history)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.newThread())
                     .toObservable<LinkGeneratorEvent>()
+                    .doOnComplete {
+                        sendMessageToWhatsApp(activityService.activity, effect.history)
+                    }
                     .doOnError {
                         CountriesExceptionEvent(it.localizedMessage)
                     }
@@ -138,36 +136,28 @@ class LinkGeneratorViewModel @Inject constructor(
                         CountriesExceptionEvent(it.localizedMessage)
                     }
             }
-        }.build()
+        }
+//        }.addTransformer(SendMessageToWhatsAppEffect::class.java) { upstream ->
+//            upstream.switchMap { effect ->
+//                sendMessageToWhatsApp(
+//                    activityService.activity,
+//                    effect.history
+//                ).toObservable<LinkGeneratorEvent>()
+//                    .doOnError {
+//                        CountriesExceptionEvent(it.localizedMessage)
+//                    }
+//            }
+//        }
+        .build()
 
 )
-
-/*private fun isFormValid(): Boolean {
-    var valid = true
-    if (etRegionCode.text?.isEmpty()!!) {
-        etPhoneNumber.error = getString(R.string.empty_field)
-        valid = false
-    }
-
-    if (etPhoneNumber.text?.isEmpty()!!) {
-        etPhoneNumber.error = getString(R.string.empty_field)
-        valid = false
-    }
-
-    if (etTextMessage.text?.isEmpty()!! || etTextMessage.text?.isBlank()!!) {
-        etTextMessage.error = getString(R.string.empty_field)
-        valid = false
-    }
-
-    return valid
-}*/
 
 fun getNow(): String {
     return LocalDateTime.now().toString()
 }
 
 fun copyToClipBoard(
-    activity: android.app.Activity,
+    activity: Activity,
     countryCode: String,
     phoneNumber: String,
     message: String
@@ -186,6 +176,43 @@ fun copyToClipBoard(
             }
         }
 }
+
+fun sendMessageToWhatsApp(
+    activity: Activity,
+    history: History
+) {
+    try {
+        val packageManager = activity.packageManager
+        val i = Intent(Intent.ACTION_VIEW)
+        val url = MessageFormat.format(
+            link,
+            history.country.areaCode,
+            history.phoneNumber,
+            history.message
+        )
+
+        i.setPackage("com.whatsapp")
+        i.data = Uri.parse(url)
+        if (i.resolveActivity(packageManager) != null) {
+            activity.startActivity(i)
+        } else {
+            showToast(
+                activity.getString(
+                    R.string.whatApp_not_installed
+                ), activity
+            )
+        }
+    } catch (e: Exception) {
+        showToast(
+            activity.getString(
+                R.string.whatApp_not_installed
+            ), activity
+        )
+    }
+
+
+}
+
 
 fun showToast(message: String, context: Context, duration: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(

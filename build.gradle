@@ -27,6 +27,8 @@ ext {
     roomVersion = '2.2.5'
     glideToVectorYouVersion = 'v2.0.0'
     threetenabpVersion = '1.2.4'
+    dataBindingVersion = '3.3.1'
+    dataBindingValidator = '2.0.0'
 }
 
 allprojects {

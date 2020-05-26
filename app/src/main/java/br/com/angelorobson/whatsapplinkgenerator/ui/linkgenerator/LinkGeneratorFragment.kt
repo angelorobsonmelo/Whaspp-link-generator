@@ -10,9 +10,12 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import br.com.angelorobson.whatsapplinkgenerator.R
+import br.com.angelorobson.whatsapplinkgenerator.databinding.LinkGeneratorFragmentBinding
 import br.com.angelorobson.whatsapplinkgenerator.model.domains.Country
 import br.com.angelorobson.whatsapplinkgenerator.ui.getViewModel
 import br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator.widgets.CountryAdapter
+import br.com.angelorobson.whatsapplinkgenerator.ui.utils.BindingFragment
+import br.com.ilhasoft.support.validation.Validator
 import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -20,16 +23,20 @@ import kotlinx.android.synthetic.main.link_generator_fragment.*
 import java.util.*
 
 
-class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
+class LinkGeneratorFragment : BindingFragment<LinkGeneratorFragmentBinding>() {
 
+    override fun getLayoutResId(): Int = R.layout.link_generator_fragment
 
     private val compositeDisposable = CompositeDisposable()
     private var countrySelected = Country()
     private var countries: ArrayList<Country> = arrayListOf()
     private lateinit var adapter: CountryAdapter
+    private lateinit var mValidator: Validator
 
     override fun onStart() {
         super.onStart()
+        setupValidator()
+
         setHasOptionsMenu(true)
         adapter = CountryAdapter(requireActivity(), countries)
 
@@ -39,14 +46,16 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
                     countryCode = etRegionCode.text.toString(),
                     phoneNumber = etPhoneNumber.text.toString(),
                     message = etTextMessage.text.toString(),
-                    country = countrySelected
+                    country = countrySelected,
+                    isFormValid = mValidator.validate()
                 )
             },
             btnCopyLink.clicks().map {
                 ButtonCopyClickedEvent(
                     countryCode = etRegionCode.text.toString(),
                     phoneNumber = etPhoneNumber.text.toString(),
-                    message = etTextMessage.text.toString()
+                    message = etTextMessage.text.toString(),
+                    isFormValid = mValidator.validate()
                 )
             }
         ).compose(getViewModel(LinkGeneratorViewModel::class).init(Initial))
@@ -66,6 +75,11 @@ class LinkGeneratorFragment : Fragment(R.layout.link_generator_fragment) {
             }
 
         compositeDisposable.add(disposable)
+    }
+
+    private fun setupValidator() {
+        mValidator = Validator(binding)
+        mValidator.enableFormValidationMode()
     }
 
     private fun handleSpinner() {
