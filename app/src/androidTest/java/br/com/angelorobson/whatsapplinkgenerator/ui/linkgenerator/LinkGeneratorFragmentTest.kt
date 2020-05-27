@@ -5,6 +5,7 @@ import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import br.com.angelorobson.whatsapplinkgenerator.R
@@ -26,7 +27,7 @@ class LinkGeneratorFragmentTest {
 
     private val mockWebServer = MockWebServer()
     var idlingResource: TestIdlingResource? = null
-    var resources: Resources? = null
+    private var resources: Resources? = null
     private var scenario: FragmentScenario<LinkGeneratorFragment>? = null
 
     @Before
@@ -36,6 +37,7 @@ class LinkGeneratorFragmentTest {
         mockResponse.setResponseCode(200)
         mockWebServer.enqueue(mockResponse)
         mockWebServer.start(8500)
+
         scenario = launchFragmentInContainer<LinkGeneratorFragment>(
             themeResId = R.style.Theme_MaterialComponents_Light_NoActionBar
         )
@@ -74,9 +76,23 @@ class LinkGeneratorFragmentTest {
         onView(withId(R.id.etTextMessage)).check(matches(withHint(R.string.message)))
 
         onView(withId(R.id.btnSendMessage)).check(matches(isDisplayed()))
+        onView(withId(R.id.btnSendMessage)).check(matches(isEnabled()))
         onView(withId(R.id.btnSendMessage)).check(matches(withText(R.string.send)))
 
         onView(withId(R.id.btnCopyLink)).check(matches(isDisplayed()))
+        onView(withId(R.id.btnCopyLink)).check(matches(isEnabled()))
         onView(withId(R.id.btnCopyLink)).check(matches(withText(R.string.copy_link)))
+    }
+
+    @Test
+    fun clickSendButton_withFormInvalid_showCanBeEmptyMessage() {
+        onView(withId(R.id.btnSendMessage)).perform(click())
+        onView(withId(R.id.etPhoneNumber)).check(matches(hasErrorText(resources?.getString(R.string.error_message_empty_validation))))
+    }
+
+    @Test
+    fun clickCopyLinkButton_withFormInvalid_showCanBeEmptyMessage() {
+        onView(withId(R.id.btnCopyLink)).perform(click())
+        onView(withId(R.id.etPhoneNumber)).check(matches(hasErrorText(resources?.getString(R.string.error_message_empty_validation))))
     }
 }
