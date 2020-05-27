@@ -2,6 +2,7 @@ package br.com.angelorobson.whatsapplinkgenerator.di
 
 import android.content.Context
 import br.com.angelorobson.whatsapplinkgenerator.model.database.dao.HistoryDao
+import br.com.angelorobson.whatsapplinkgenerator.ui.utils.ActivityService
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.IdlingResource
 import br.com.angelorobson.whatsapplinkgenerator.utils.TestIdlingResource
 import dagger.BindsInstance
@@ -15,6 +16,8 @@ import javax.inject.Singleton
 interface TestComponent : ApplicationComponent {
 
     fun idlingResource(): IdlingResource
+    override fun activityService(): ActivityService
+
 
     @Component.Builder
     interface Builder {

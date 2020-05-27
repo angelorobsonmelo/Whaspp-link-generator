@@ -4,6 +4,7 @@ import br.com.angelorobson.whatsapplinkgenerator.di.DaggerTestComponent
 import br.com.angelorobson.whatsapplinkgenerator.model.database.dao.HistoryDao
 import br.com.angelorobson.whatsapplinkgenerator.model.entities.HistoryEntity
 import br.com.angelorobson.whatsapplinkgenerator.ui.App
+import br.com.angelorobson.whatsapplinkgenerator.ui.component
 import io.reactivex.Completable
 import io.reactivex.Observable
 

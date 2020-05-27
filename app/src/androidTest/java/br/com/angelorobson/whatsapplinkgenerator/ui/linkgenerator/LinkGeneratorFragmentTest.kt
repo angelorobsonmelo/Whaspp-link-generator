@@ -6,15 +6,16 @@ import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import br.com.angelorobson.whatsapplinkgenerator.R
 import br.com.angelorobson.whatsapplinkgenerator.di.TestComponent
-import br.com.angelorobson.whatsapplinkgenerator.model.entities.CountryEntity
-import br.com.angelorobson.whatsapplinkgenerator.model.entities.HistoryEntity
 import br.com.angelorobson.whatsapplinkgenerator.ui.component
+import br.com.angelorobson.whatsapplinkgenerator.ui.utils.ActivityService
 import br.com.angelorobson.whatsapplinkgenerator.utils.FileUtils
 import br.com.angelorobson.whatsapplinkgenerator.utils.TestIdlingResource
+import br.com.angelorobson.whatsapplinkgenerator.utils.isToast
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.CoreMatchers.not
@@ -46,6 +47,9 @@ class LinkGeneratorFragmentTest {
             resources = fragment.resources
             idlingResource =
                 ((fragment.activity!!.component as TestComponent).idlingResource() as TestIdlingResource)
+              val activityService =  ((fragment.activity!!.component as TestComponent).activityService() as ActivityService)
+             activityService.onCreate(fragment.activity!!)
+
             IdlingRegistry.getInstance().register(idlingResource!!.countingIdlingResource)
             idlingResource!!.increment()
         }
@@ -94,5 +98,13 @@ class LinkGeneratorFragmentTest {
     fun clickCopyLinkButton_withFormInvalid_showCanBeEmptyMessage() {
         onView(withId(R.id.btnCopyLink)).perform(click())
         onView(withId(R.id.etPhoneNumber)).check(matches(hasErrorText(resources?.getString(R.string.error_message_empty_validation))))
+    }
+
+    @Test
+    fun clickCopyLinkButton_withFormValid_showCopiedMessage() {
+        onView(withId(R.id.etPhoneNumber)).perform(typeText("8299155554"))
+        onView(withId(R.id.btnCopyLink)).perform(click())
+
+        onView(withText(R.string.copied)).inRoot(isToast()).check(matches(isDisplayed()));
     }
 }
