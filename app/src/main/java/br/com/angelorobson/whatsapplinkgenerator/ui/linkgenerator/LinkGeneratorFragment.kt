@@ -60,20 +60,25 @@ class LinkGeneratorFragment : BindingFragment<LinkGeneratorFragmentBinding>() {
                 )
             }
         ).compose(getViewModel(LinkGeneratorViewModel::class).init(Initial))
-            .subscribe { model ->
-                if (model.linkGeneratorResult is LinkGeneratorResult.Loading) {
-                    progress_horizontal.isVisible = model.linkGeneratorResult.isLoading
-                }
+            .subscribe(
+                { model ->
+                    if (model.linkGeneratorResult is LinkGeneratorResult.Loading) {
+                        progress_horizontal.isVisible = model.linkGeneratorResult.isLoading
+                    }
 
-                if (model.linkGeneratorResult is LinkGeneratorResult.CountriesLoaded) {
-                    progress_horizontal.isVisible = model.linkGeneratorResult.isLoading
-                    countries.addAll(model.linkGeneratorResult.countries)
-                    handleSpinner()
+                    if (model.linkGeneratorResult is LinkGeneratorResult.CountriesLoaded) {
+                        progress_horizontal.isVisible = model.linkGeneratorResult.isLoading
+                        countries.addAll(model.linkGeneratorResult.countries)
+                        handleSpinner()
+                    }
+                    if (model.linkGeneratorResult is LinkGeneratorResult.Error) {
+                        progress_horizontal.isVisible = model.linkGeneratorResult.isLoading
+                    }
+                },
+                {
+                    println(it.printStackTrace())
                 }
-                if (model.linkGeneratorResult is LinkGeneratorResult.Error) {
-                    progress_horizontal.isVisible = model.linkGeneratorResult.isLoading
-                }
-            }
+            )
 
         compositeDisposable.add(disposable)
     }
