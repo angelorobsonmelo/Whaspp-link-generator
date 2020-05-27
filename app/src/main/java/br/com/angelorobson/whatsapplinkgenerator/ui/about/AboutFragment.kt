@@ -2,6 +2,8 @@ package br.com.angelorobson.whatsapplinkgenerator.ui.about
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.Fragment
 import br.com.angelorobson.whatsapplinkgenerator.R
 import com.vansuita.materialabout.builder.AboutBuilder
@@ -10,13 +12,15 @@ import kotlinx.android.synthetic.main.fragment_about.*
 
 class AboutFragment : Fragment(R.layout.fragment_about) {
 
-    override fun onStart() {
-        super.onStart()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setUpAboutScreen()
     }
 
     private fun setUpAboutScreen() {
         val frameLayout = about
+        frameLayout.refreshDrawableState()
 
         val builder = AboutBuilder.with(requireContext())
             .setAppIcon(R.mipmap.ic_launcher)
