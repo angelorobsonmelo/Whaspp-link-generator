@@ -1,6 +1,7 @@
 package br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator
 
 import android.content.res.Resources
+import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
@@ -16,47 +17,46 @@ import br.com.angelorobson.whatsapplinkgenerator.utils.TestIdlingResource
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.CoreMatchers.not
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
 
 
 class LinkGeneratorFragmentTest {
 
-    private val historyEntity = HistoryEntity(
-        createdAt = "14/07/2402",
-        message = "message",
-        phoneNumber = "phoneNumber",
-        countryEntity = CountryEntity(
-            countryShortName = "countryShortName",
-            areaCode = "areaCode",
-            flag = "flag",
-            countryFullName = "countryFullName"
-        )
-    )
-
     private val mockWebServer = MockWebServer()
+    var idlingResource: TestIdlingResource? = null
+    var resources: Resources? = null
+    private var scenario: FragmentScenario<LinkGeneratorFragment>? = null
 
-    @Test
-    fun initialViews() {
+    @Before
+    fun setUp() {
         val mockResponse = MockResponse()
             .setBody(FileUtils.getJson("json/countries/countries.json"))
         mockResponse.setResponseCode(200)
         mockWebServer.enqueue(mockResponse)
         mockWebServer.start(8500)
-
-        val scenario = launchFragmentInContainer<LinkGeneratorFragment>(
+        scenario = launchFragmentInContainer<LinkGeneratorFragment>(
             themeResId = R.style.Theme_MaterialComponents_Light_NoActionBar
         )
 
-        var idlingResource: TestIdlingResource? = null
-        var resources: Resources? = null
-        scenario.onFragment { fragment ->
+        scenario?.onFragment { fragment ->
             resources = fragment.resources
             idlingResource =
                 ((fragment.activity!!.component as TestComponent).idlingResource() as TestIdlingResource)
             IdlingRegistry.getInstance().register(idlingResource!!.countingIdlingResource)
             idlingResource!!.increment()
         }
+    }
 
+    @After
+    fun tearDown() {
+        IdlingRegistry.getInstance().unregister(idlingResource!!.countingIdlingResource)
+        mockWebServer.close()
+    }
+
+    @Test
+    fun initialViews() {
         onView(withId(R.id.spinnerCountryCode)).check(matches(isDisplayed()))
         onView(withId(R.id.tvCountryCode)).check(matches(withText(R.string.country_code)))
 
@@ -65,7 +65,6 @@ class LinkGeneratorFragmentTest {
 
         onView(withId(R.id.tvPhoneNumber)).check(matches(withText(R.string.phone_number)))
         onView(withId(R.id.tvPhoneNumber)).check(matches(isDisplayed()))
-
 
         onView(withId(R.id.etPhoneNumber)).check(matches(isDisplayed()))
         onView(withId(R.id.etPhoneNumber)).check(matches(withHint(R.string.cell_phone)))
@@ -79,8 +78,5 @@ class LinkGeneratorFragmentTest {
 
         onView(withId(R.id.btnCopyLink)).check(matches(isDisplayed()))
         onView(withId(R.id.btnCopyLink)).check(matches(withText(R.string.copy_link)))
-
-        IdlingRegistry.getInstance().unregister(idlingResource!!.countingIdlingResource)
-        mockWebServer.close()
     }
 }
