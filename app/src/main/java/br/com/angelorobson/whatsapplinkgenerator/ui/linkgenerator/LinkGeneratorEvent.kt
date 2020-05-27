@@ -6,7 +6,7 @@ import br.com.ilhasoft.support.validation.Validator
 
 sealed class LinkGeneratorEvent
 
-object Initial : LinkGeneratorEvent()
+object InitialEvent : LinkGeneratorEvent()
 
 
 data class ButtonSendClickedEvent(
@@ -31,5 +31,3 @@ data class SendMessageToWhatsAppEvent(
 data class CountriesLoadedEvent(val countries: List<Country>) : LinkGeneratorEvent()
 
 data class CountriesExceptionEvent(val errorMessage: String) : LinkGeneratorEvent()
-
-object FormInvalidEvent : LinkGeneratorEvent()

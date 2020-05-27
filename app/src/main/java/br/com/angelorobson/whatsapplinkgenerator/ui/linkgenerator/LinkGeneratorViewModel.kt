@@ -6,6 +6,7 @@ import br.com.angelorobson.whatsapplinkgenerator.model.repositories.CountryRepos
 import br.com.angelorobson.whatsapplinkgenerator.model.repositories.HistoryRepository
 import br.com.angelorobson.whatsapplinkgenerator.ui.MobiusVM
 import br.com.angelorobson.whatsapplinkgenerator.ui.share.copyToClipBoard
+import br.com.angelorobson.whatsapplinkgenerator.ui.share.getNow
 import br.com.angelorobson.whatsapplinkgenerator.ui.share.sendMessageToWhatsApp
 import br.com.angelorobson.whatsapplinkgenerator.ui.share.showToast
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.ActivityService
@@ -17,7 +18,6 @@ import com.spotify.mobius.Update
 import com.spotify.mobius.rx2.RxMobius
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import org.threeten.bp.LocalDateTime
 import javax.inject.Inject
 
 
@@ -26,7 +26,7 @@ fun linkGeneratorUpdate(
     event: LinkGeneratorEvent
 ): Next<LinkGeneratorModel, LinkGeneratorEffect> {
     return when (event) {
-        is Initial -> dispatch(setOf(ObserveCountriesEffect))
+        is InitialEvent -> dispatch(setOf(ObserveCountriesEffect))
         is CountriesLoadedEvent -> next(
             model.copy(
                 linkGeneratorResult = LinkGeneratorResult.CountriesLoaded(
@@ -43,7 +43,6 @@ fun linkGeneratorUpdate(
                 )
             )
         )
-        FormInvalidEvent -> noChange()
         is ButtonSendClickedEvent ->
             if (event.isFormValid) {
                 dispatch<LinkGeneratorModel, LinkGeneratorEffect>(
@@ -133,6 +132,4 @@ class LinkGeneratorViewModel @Inject constructor(
 
 )
 
-fun getNow(): String {
-    return LocalDateTime.now().toString()
-}
+

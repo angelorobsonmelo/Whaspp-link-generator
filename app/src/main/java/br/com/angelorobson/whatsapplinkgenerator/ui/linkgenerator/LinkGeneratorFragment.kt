@@ -60,7 +60,7 @@ class LinkGeneratorFragment : BindingFragment<LinkGeneratorFragmentBinding>() {
                     isFormValid = mValidator.validate()
                 )
             }
-        ).compose(getViewModel(LinkGeneratorViewModel::class).init(Initial))
+        ).compose(getViewModel(LinkGeneratorViewModel::class).init(InitialEvent))
             .subscribe(
                 { model ->
                     if (model.linkGeneratorResult is LinkGeneratorResult.Loading) {
