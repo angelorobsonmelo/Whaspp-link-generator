@@ -118,14 +118,8 @@ class LinkGeneratorViewModel @Inject constructor(
             upstream.switchMap { effect ->
                 historyRepository.saveHistory(effect.history)
                     .subscribeOn(Schedulers.newThread())
-                    .toObservable<LinkGeneratorEvent>()
-                    .compose {
-                        Observable.create<LinkGeneratorEvent> { emitter ->
-                            emitter.onNext(SendMessageToWhatsAppEvent(effect.history))
-                        }.doOnError {
-                            CountriesExceptionEvent(it.localizedMessage)
-                        }
-                    }
+                    .toSingleDefault(SendMessageToWhatsAppEvent(effect.history))
+                    .toObservable()
                     .doOnError {
                         CountriesExceptionEvent(it.localizedMessage)
                     }
