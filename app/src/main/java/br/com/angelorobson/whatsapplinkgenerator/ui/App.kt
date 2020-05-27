@@ -11,9 +11,9 @@ import br.com.angelorobson.whatsapplinkgenerator.di.DaggerRealComponent
 import com.jakewharton.threetenabp.AndroidThreeTen
 import kotlin.reflect.KClass
 
-class App : Application() {
+open class App : Application() {
 
-    val component: ApplicationComponent by lazy {
+    open val component: ApplicationComponent by lazy {
         DaggerRealComponent.builder()
             .context(this)
             .build()

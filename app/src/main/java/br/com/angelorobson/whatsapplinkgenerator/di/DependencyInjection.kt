@@ -142,14 +142,8 @@ object DatabaseModule {
     @Provides
     @Singleton
     @JvmStatic
-    fun applicationDatabase(context: Context): ApplicationDatabase {
-        return Room.databaseBuilder(
-            context,
-            ApplicationDatabase::class.java,
-            "send_whatsap_message_database"
-        )
-            .build()
-    }
+    fun historyDao(database: ApplicationDatabase) = database.historyDao()
+
 }
 
 @Module
@@ -163,8 +157,16 @@ object RealModule {
         override fun decrement() {}
     }
 
+
     @Provides
     @Singleton
     @JvmStatic
-    fun historyDao(database: ApplicationDatabase) = database.historyDao()
+    fun applicationDatabase(context: Context): ApplicationDatabase {
+        return Room.databaseBuilder(
+            context,
+            ApplicationDatabase::class.java,
+            "send_whatsap_message_database"
+        )
+            .build()
+    }
 }

@@ -11,6 +11,7 @@ import br.com.angelorobson.whatsapplinkgenerator.ui.share.sendMessageToWhatsApp
 import br.com.angelorobson.whatsapplinkgenerator.ui.share.showToast
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.ActivityService
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.HandlerErrorRemoteDataSource.validateStatusCode
+import br.com.angelorobson.whatsapplinkgenerator.ui.utils.IdlingResource
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.Navigator
 import com.spotify.mobius.Next
 import com.spotify.mobius.Next.*
@@ -81,7 +82,7 @@ fun linkGeneratorUpdate(
 class LinkGeneratorViewModel @Inject constructor(
     repository: CountryRepository,
     historyRepository: HistoryRepository,
-    navigator: Navigator,
+    idlingResource: IdlingResource,
     activityService: ActivityService
 ) : MobiusVM<LinkGeneratorModel, LinkGeneratorEvent, LinkGeneratorEffect>(
     "LinkGeneratorViewModel",
@@ -94,9 +95,11 @@ class LinkGeneratorViewModel @Inject constructor(
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .map {
-                        CountriesLoadedEvent(it)
+
+                        CountriesLoadedEvent(it) as LinkGeneratorEvent
                     }
-                    .doOnError {
+                    .onErrorReturn {
+
                         val errorMessage = validateStatusCode(it)
                         showToast(errorMessage, activityService.activity, Toast.LENGTH_LONG)
                         CountriesExceptionEvent(errorMessage)

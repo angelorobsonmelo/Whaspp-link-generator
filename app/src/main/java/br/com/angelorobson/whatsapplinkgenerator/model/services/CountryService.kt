@@ -6,6 +6,6 @@ import retrofit2.http.GET
 
 interface CountryService {
 
-    @GET("all")
+    @GET("v2/all")
     fun getAll(): Observable<List<CountryDto>>
 }

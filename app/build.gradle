@@ -1,13 +1,16 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+
 apply plugin: 'androidx.navigation.safeargs'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
 apply plugin: 'kotlin-kapt'
 
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.3"
 
     defaultConfig {
         applicationId "br.com.angelorobson.whatsapplinkgenerator"
@@ -15,22 +18,11 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "br.com.angelorobson.whatsapplinkgenerator.AndroidTestRunner"
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
 
-    dataBinding {
-        enabled true
-    }
-
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
+    testBuildType 'instrumented'
 
     buildTypes {
         instrumented {
@@ -42,6 +34,19 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    dataBinding {
+        enabled true
     }
 
 }
@@ -70,7 +75,6 @@ dependencies {
     implementation "com.spotify.mobius:mobius-core:$mobiusVersion"
     implementation "com.spotify.mobius:mobius-rx2:$mobiusVersion"
     implementation "com.spotify.mobius:mobius-android:$mobiusVersion"
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation "com.spotify.mobius:mobius-test:$mobiusVersion"
 
     implementation "com.google.dagger:dagger:$daggerVersion"
@@ -113,6 +117,7 @@ dependencies {
     instrumentedImplementation "androidx.test:core:$testingVersion"
     instrumentedImplementation "androidx.fragment:fragment-testing:$fragmentVersion"
     instrumentedImplementation "com.squareup.okhttp3:mockwebserver:$mockWebServerVersion"
+
     kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion"
 
     testImplementation "io.mockk:mockk:$ioMockVersion"
