@@ -3,7 +3,7 @@
     <string name="country_code">Country code</string>
     <string name="phone_number">Telephone number</string>
     <string name="hint_code">82</string>
-    <string name="cell_phone">Number</string>
+    <string name="cell_phone">City code and nº cell</string>
     <string name="message">Message</string>
     <string name="send">Send</string>
     <string name="copy_link">Copy</string>

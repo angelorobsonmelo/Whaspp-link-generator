@@ -15,6 +15,7 @@ import br.com.angelorobson.whatsapplinkgenerator.databinding.LinkGeneratorFragme
 import br.com.angelorobson.whatsapplinkgenerator.model.domains.Country
 import br.com.angelorobson.whatsapplinkgenerator.ui.getViewModel
 import br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator.widgets.CountryAdapter
+import br.com.angelorobson.whatsapplinkgenerator.ui.share.showToast
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.BindingFragment
 import br.com.ilhasoft.support.validation.Validator
 import com.jakewharton.rxbinding3.view.clicks
@@ -63,20 +64,23 @@ class LinkGeneratorFragment : BindingFragment<LinkGeneratorFragmentBinding>() {
             .subscribe(
                 { model ->
                     if (model.linkGeneratorResult is LinkGeneratorResult.Loading) {
-                        progress_horizontal.isVisible = model.linkGeneratorResult.isLoading
+                        binding.progressHorizontal.isVisible = model.linkGeneratorResult.isLoading
                     }
 
                     if (model.linkGeneratorResult is LinkGeneratorResult.CountriesLoaded) {
-                        progress_horizontal.isVisible = model.linkGeneratorResult.isLoading
+                        binding.progressHorizontal.isVisible = model.linkGeneratorResult.isLoading
                         countries.addAll(model.linkGeneratorResult.countries)
                         handleSpinner()
                     }
                     if (model.linkGeneratorResult is LinkGeneratorResult.Error) {
-                        progress_horizontal.isVisible = model.linkGeneratorResult.isLoading
+                        binding.progressHorizontal.isVisible = model.linkGeneratorResult.isLoading
                     }
                 },
                 {
-                    println(it.printStackTrace())
+                    showToast(
+                        it.localizedMessage ?: getString(R.string.unknown_error),
+                        requireContext()
+                    )
                 }
             )
 

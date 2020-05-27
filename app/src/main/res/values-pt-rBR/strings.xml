@@ -4,7 +4,7 @@
     <string name="country_code">Código do País</string>
     <string name="phone_number">Número do Telefone</string>
     <string name="hint_code">82</string>
-    <string name="cell_phone">Número</string>
+    <string name="cell_phone">DDD e nº do celular</string>
     <string name="message">Mensagem</string>
     <string name="send">Enviar</string>
     <string name="copy_link">Copiar</string>
