@@ -2,6 +2,8 @@ package br.com.angelorobson.whatsapplinkgenerator.ui.history
 
 import br.com.angelorobson.whatsapplinkgenerator.model.repositories.HistoryRepository
 import br.com.angelorobson.whatsapplinkgenerator.ui.MobiusVM
+import br.com.angelorobson.whatsapplinkgenerator.ui.share.sendMessageToWhatsApp
+import br.com.angelorobson.whatsapplinkgenerator.ui.utils.ActivityService
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.Navigator
 import com.spotify.mobius.Next
 import com.spotify.mobius.Next.dispatch
@@ -32,12 +34,14 @@ fun historyUpdate(
                 )
             )
         )
+        is ResendMessageToWhatsAppEvent -> dispatch(setOf(ResendMessageToWhatsAppEffect(event.history)))
     }
 }
 
 class HistoryViewModel @Inject constructor(
     repository: HistoryRepository,
-    navigator: Navigator
+    navigator: Navigator,
+    activityService: ActivityService
 ) : MobiusVM<HistoryModel, HistoryEvent, HistoryEffect>(
     "HistoryViewModel",
     Update(::historyUpdate),
@@ -55,5 +59,9 @@ class HistoryViewModel @Inject constructor(
                         HistoryExceptionEvent(it.localizedMessage)
                     }
             }
-        }.build()
+        }
+        .addConsumer(ResendMessageToWhatsAppEffect::class.java) { effect ->
+            sendMessageToWhatsApp(activityService.activity, effect.history)
+        }
+        .build()
 )

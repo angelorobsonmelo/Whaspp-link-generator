@@ -22,31 +22,33 @@ class HistoryFragment : Fragment(R.layout.fragment_history) {
         val adapter = HistoryAdapter(requireActivity())
         recyclerView.adapter = adapter
 
-        disposable = Observable.empty<HistoryEvent>()
-            .compose(getViewModel(HistoryViewModel::class).init(InitialEvent))
-            .subscribe { model ->
-                if (model.historyResult is HistoryResult.Loading) {
-                    tvEmpty.isVisible = false
-                    progress_horizontal.isVisible = model.historyResult.isLoading
-                }
-                if (model.historyResult is HistoryResult.HistoryLoaded) {
-                    val histories = model.historyResult.histories
+        disposable =
+            Observable.mergeArray(adapter.historyClicks.map { ResendMessageToWhatsAppEvent(it) }
+            )
+                .compose(getViewModel(HistoryViewModel::class).init(InitialEvent))
+                .subscribe { model ->
+                    if (model.historyResult is HistoryResult.Loading) {
+                        tvEmpty.isVisible = false
+                        progress_horizontal.isVisible = model.historyResult.isLoading
+                    }
+                    if (model.historyResult is HistoryResult.HistoryLoaded) {
+                        val histories = model.historyResult.histories
 
-                    progress_horizontal.isVisible = model.historyResult.isLoading
+                        progress_horizontal.isVisible = model.historyResult.isLoading
 
-                    if (histories.isEmpty()) {
-                        tvEmpty.isVisible = true
-                        return@subscribe
+                        if (histories.isEmpty()) {
+                            tvEmpty.isVisible = true
+                            return@subscribe
+                        }
+
+                        adapter.submitList(histories)
+                    }
+                    if (model.historyResult is HistoryResult.Error) {
+                        tvEmpty.isVisible = false
+                        progress_horizontal.isVisible = model.historyResult.isLoading
                     }
 
-                    adapter.submitList(histories)
                 }
-                if (model.historyResult is HistoryResult.Error) {
-                    tvEmpty.isVisible = false
-                    progress_horizontal.isVisible = model.historyResult.isLoading
-                }
-
-            }
     }
 
 }

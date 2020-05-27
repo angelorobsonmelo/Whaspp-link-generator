@@ -10,4 +10,8 @@ data class HistoryLoadedEvent(
     val histories: List<History>
 ) : HistoryEvent()
 
+data class ResendMessageToWhatsAppEvent(
+    val history: History
+) : HistoryEvent()
+
 data class HistoryExceptionEvent(val errorMessage: String) : HistoryEvent()
