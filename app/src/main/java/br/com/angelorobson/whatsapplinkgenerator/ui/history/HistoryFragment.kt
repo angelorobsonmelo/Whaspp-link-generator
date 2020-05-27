@@ -7,13 +7,13 @@ import br.com.angelorobson.whatsapplinkgenerator.R
 import br.com.angelorobson.whatsapplinkgenerator.ui.getViewModel
 import br.com.angelorobson.whatsapplinkgenerator.ui.history.widgets.HistoryAdapter
 import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_history.*
 
 
 class HistoryFragment : Fragment(R.layout.fragment_history) {
 
-    private lateinit var disposable: Disposable
+    private val compositeDisposable = CompositeDisposable()
 
     override fun onStart() {
         super.onStart()
@@ -22,7 +22,7 @@ class HistoryFragment : Fragment(R.layout.fragment_history) {
         val adapter = HistoryAdapter(requireActivity())
         recyclerView.adapter = adapter
 
-        disposable =
+        val disposable =
             Observable.mergeArray(adapter.historyClicks.map { ResendMessageToWhatsAppEvent(it) }
             )
                 .compose(getViewModel(HistoryViewModel::class).init(InitialEvent))
@@ -49,6 +49,13 @@ class HistoryFragment : Fragment(R.layout.fragment_history) {
                     }
 
                 }
+
+        compositeDisposable.add(disposable)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        compositeDisposable.clear()
     }
 
 }
