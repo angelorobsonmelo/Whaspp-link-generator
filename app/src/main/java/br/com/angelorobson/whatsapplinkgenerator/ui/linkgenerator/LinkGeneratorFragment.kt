@@ -119,7 +119,7 @@ class LinkGeneratorFragment : BindingFragment<LinkGeneratorFragmentBinding>() {
         } else {
             adapter.getPosition(
                 countries.filter {
-                    it.countryShortName == "countryShortName"
+                    it.countryShortName == countryShortName
                 }[0]
             )
         }
