@@ -6,9 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.databinding.DataBindingUtil
 import androidx.databinding.DataBindingUtil.*
 import br.com.angelorobson.whatsapplinkgenerator.R
 import br.com.angelorobson.whatsapplinkgenerator.databinding.CountrySpinnerRowBinding
@@ -34,21 +31,24 @@ class CountryAdapter(private val activity: Activity, countries: List<Country>) :
                 R.layout.country_spinner_row, parent, false
             )
         }
-        val country = getItem(position)
+        val item = getItem(position)
         val binding = bind<CountrySpinnerRowBinding>(converterV!!)
 
-        binding?.country = CountryItem(
-            areaCode = country?.areaCode ?: "",
-            countryShortName = country?.countryShortName ?: ""
-        )
+        binding?.apply {
+            country = CountryItem(
+                areaCode = item?.areaCode ?: "",
+                countryShortName = item?.countryShortName ?: ""
+            )
 
-        val imageFlag = binding?.ivFlag
+            val imageFlag = binding.ivFlag
+            val uri =
+                Uri.parse(item?.flag)
 
-        val uri =
-            Uri.parse(country?.flag)
+            GlideToVectorYou.justLoadImage(activity, uri, imageFlag!!)
 
-        GlideToVectorYou.justLoadImage(activity, uri, imageFlag!!)
+            executePendingBindings()
+        }
 
-        return binding.root
+        return binding?.root!!
     }
 }
