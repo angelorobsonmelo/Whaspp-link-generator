@@ -15,18 +15,12 @@ fun copyToClipBoard(
     countryCode: String,
     phoneNumber: String,
     message: String
-): Completable {
-    return Single.fromCallable {}
-        .flatMapCompletable {
-            val url = MessageFormat.format(link, countryCode, phoneNumber, message)
-            val clipboard =
-                activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val clip: ClipData = ClipData.newPlainText("linkWhatsApp", url)
+) {
+    val url = MessageFormat.format(link, countryCode, phoneNumber, message)
+    val clipboard =
+        activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    val clip: ClipData = ClipData.newPlainText("linkWhatsApp", url)
 
-            clipboard.setPrimaryClip(clip)
-            CompletableSource {
-                it.onComplete()
-                showToast(activity.getString(R.string.copied), activity.applicationContext)
-            }
-        }
+    clipboard.setPrimaryClip(clip)
+    showToast(activity.getString(R.string.copied), activity.applicationContext)
 }

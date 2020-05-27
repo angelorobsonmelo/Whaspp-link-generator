@@ -116,28 +116,18 @@ class LinkGeneratorViewModel @Inject constructor(
 
             }
         }
-        .addTransformer(CopyToClipBoardEffect::class.java) { upstream ->
-            upstream.switchMap { effect ->
-                copyToClipBoard(
-                    activityService.activity,
-                    effect.countryCode,
-                    effect.phoneNumber,
-                    effect.message
-                ).toObservable<LinkGeneratorEvent>()
-                    .doOnError {
-                        CountriesExceptionEvent(it.localizedMessage)
-                    }
-            }
-        }.addTransformer(SendMessageToWhatsAppEffect::class.java) { upstream ->
-            upstream.switchMap { effect ->
-                sendMessageToWhatsApp(
-                    activityService.activity,
-                    effect.history
-                ).toObservable<LinkGeneratorEvent>()
-                    .doOnError {
-                        CountriesExceptionEvent(it.localizedMessage)
-                    }
-            }
+        .addConsumer(CopyToClipBoardEffect::class.java) { effect ->
+            copyToClipBoard(
+                activityService.activity,
+                effect.countryCode,
+                effect.phoneNumber,
+                effect.message
+            )
+        }.addConsumer(SendMessageToWhatsAppEffect::class.java) { effect ->
+            sendMessageToWhatsApp(
+                activityService.activity,
+                effect.history
+            )
         }
         .build()
 
