@@ -10,14 +10,15 @@
         android:id="@+id/linkGeneratorFragment"
         android:name="br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator.LinkGeneratorFragment"
         android:label="@string/app_name"
-        tools:layout="@layout/link_generator_fragment">
-        <action
-            android:id="@+id/history"
-            app:destination="@id/historyFragment" />
-    </fragment>
+        tools:layout="@layout/link_generator_fragment"/>
     <fragment
         android:id="@+id/historyFragment"
         android:name="br.com.angelorobson.whatsapplinkgenerator.ui.history.HistoryFragment"
         android:label="@string/message_history"
         tools:layout="@layout/fragment_history" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="br.com.angelorobson.whatsapplinkgenerator.ui.about.AboutFragment"
+        android:label="@string/about"
+        tools:layout="@layout/fragment_about" />
 </navigation>

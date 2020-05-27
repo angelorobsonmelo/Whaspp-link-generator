@@ -3,9 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/aboutFragment"
+        android:icon="@drawable/ic_info"
+        android:title="@string/about"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/historyFragment"
-        android:title="@string/message_history"
         android:icon="@drawable/ic_history"
-        app:showAsAction="always" />
+        android:title="@string/message_history"
+        app:showAsAction="ifRoom" />
+
 
 </menu>

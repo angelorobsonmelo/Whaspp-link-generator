@@ -29,6 +29,7 @@ ext {
     threetenabpVersion = '1.2.4'
     dataBindingVersion = '3.3.1'
     dataBindingValidator = '2.0.0'
+    materialAboutVersion = '0.2.3'
 }
 
 allprojects {

@@ -27,5 +27,9 @@
     <string name="message_history">Histórico de Mensagens</string>
 
     <string name="no_history">Sem História</string>
+    <string name="about">Sobre</string>
+    <string name="profession">Engenheiro de software</string>
+
+    <string name="brief">Graduado em Sistemas de Informação e Pós-graduado em Engenharia de Software. Sou um amante e um entusiasta da tecnologia. Fabricante de idéias e curioso.</string>
 
 </resources>

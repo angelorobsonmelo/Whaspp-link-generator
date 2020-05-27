@@ -70,6 +70,7 @@ dependencies {
     implementation "com.spotify.mobius:mobius-core:$mobiusVersion"
     implementation "com.spotify.mobius:mobius-rx2:$mobiusVersion"
     implementation "com.spotify.mobius:mobius-android:$mobiusVersion"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation "com.spotify.mobius:mobius-test:$mobiusVersion"
 
     implementation "com.google.dagger:dagger:$daggerVersion"
@@ -100,6 +101,8 @@ dependencies {
 
     kapt "com.android.databinding:compiler:$androidGradlePluginVersion"
 
+    // About Screen
+    implementation "com.github.jrvansuita:MaterialAbout:$materialAboutVersion"
 
     // Data Binding validator
     implementation "com.github.Ilhasoft:data-binding-validator:$dataBindingValidator"
