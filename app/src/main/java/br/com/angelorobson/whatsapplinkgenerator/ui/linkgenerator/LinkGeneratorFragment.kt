@@ -92,11 +92,11 @@ class LinkGeneratorFragment : BindingFragment<LinkGeneratorFragmentBinding>() {
         spinnerCountryCode.adapter = adapter
         adapter.notifyDataSetChanged()
 
-        val countryShortName = Locale.getDefault().country
-        val positionToBeSelected: Int
-
-        positionToBeSelected = getItemPositionItemToBeSelected(countryShortName)
-
+        val positionToBeSelected: Int = try {
+            getItemPositionItemToBeSelected()
+        } catch (e: IndexOutOfBoundsException) {
+            0
+        }
         spinnerCountryCode.setSelection(positionToBeSelected)
 
         val areaCode =
@@ -104,6 +104,25 @@ class LinkGeneratorFragment : BindingFragment<LinkGeneratorFragmentBinding>() {
         etRegionCode.setText(areaCode)
 
         handleItemSelected()
+    }
+
+    @Throws(IndexOutOfBoundsException::class)
+    private fun getItemPositionItemToBeSelected(): Int {
+        val countryShortName = Locale.getDefault().country
+
+        return if (countrySelected.countryShortName.isNotEmpty()) {
+            adapter.getPosition(
+                countries.filter {
+                    it.countryShortName == countrySelected.countryShortName
+                }[0]
+            )
+        } else {
+            adapter.getPosition(
+                countries.filter {
+                    it.countryShortName == "countryShortName"
+                }[0]
+            )
+        }
     }
 
     private fun handleItemSelected() {
@@ -122,22 +141,6 @@ class LinkGeneratorFragment : BindingFragment<LinkGeneratorFragmentBinding>() {
                 countrySelected = country
             }
 
-        }
-    }
-
-    private fun getItemPositionItemToBeSelected(countryShortName: String): Int {
-        return if (countrySelected.countryShortName.isNotEmpty()) {
-            adapter.getPosition(
-                countries.filter {
-                    it.countryShortName == countrySelected.countryShortName
-                }[0]
-            )
-        } else {
-            adapter.getPosition(
-                countries.filter {
-                    it.countryShortName == countryShortName
-                }[0]
-            )
         }
     }
 
