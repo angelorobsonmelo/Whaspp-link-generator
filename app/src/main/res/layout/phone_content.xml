@@ -5,7 +5,7 @@
     <data>
 
         <variable
-            name="secondaryItem"
+            name="history"
             type="br.com.angelorobson.whatsapplinkgenerator.model.domains.History" />
     </data>
 
@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:text="@{secondaryItem.country.countryShortName}"
+            android:text="@{history.country.countryShortName}"
             android:textColor="@android:color/black"
             tools:text="BR" />
 
@@ -38,11 +38,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:textColor="@android:color/black"
-            app:areaCode="@{secondaryItem.country.areaCode}"
+            app:areaCode="@{history.country.areaCode}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/ivFlag"
             app:layout_constraintTop_toTopOf="@id/ivFlag"
-            app:phoneNumber="@{secondaryItem.phoneNumber}"
+            app:phoneNumber="@{history.phoneNumber}"
             tools:text="(+55) 82991228122" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
