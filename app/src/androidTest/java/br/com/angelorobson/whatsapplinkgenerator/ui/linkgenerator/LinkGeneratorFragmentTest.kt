@@ -5,9 +5,8 @@ import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import br.com.angelorobson.whatsapplinkgenerator.AndroidTestApplication
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import br.com.angelorobson.whatsapplinkgenerator.R
 import br.com.angelorobson.whatsapplinkgenerator.di.TestComponent
 import br.com.angelorobson.whatsapplinkgenerator.model.entities.CountryEntity
@@ -49,16 +48,19 @@ class LinkGeneratorFragmentTest {
 
         var idlingResource: TestIdlingResource? = null
         var resources: Resources? = null
-        /*scenario.onFragment { fragment ->
+        scenario.onFragment { fragment ->
             resources = fragment.resources
-            (fragment.activity!!.component as TestComponent).idlingResource() as TestIdlingResource
+            idlingResource =
+                ((fragment.activity!!.component as TestComponent).idlingResource() as TestIdlingResource)
             IdlingRegistry.getInstance().register(idlingResource!!.countingIdlingResource)
-        }*/
+            idlingResource!!.increment()
+        }
 
-        onView(withId(R.id.etPhoneNumber)).check(matches(isDisplayed()))
+        onView(withId(R.id.tvCountryCode)).check(matches(withText(R.string.country_code)))
+//        onView(withId(R.id.tvPhoneNumber)).check(matches(withText(R.string.)))
 
 
-//        IdlingRegistry.getInstance().unregister(idlingResource!!.countingIdlingResource)
+        IdlingRegistry.getInstance().unregister(idlingResource!!.countingIdlingResource)
         mockWebServer.close()
     }
 }

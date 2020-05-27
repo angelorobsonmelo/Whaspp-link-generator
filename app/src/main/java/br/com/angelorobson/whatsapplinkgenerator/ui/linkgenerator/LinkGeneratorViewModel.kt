@@ -95,11 +95,11 @@ class LinkGeneratorViewModel @Inject constructor(
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .map {
-
+                        idlingResource.decrement()
                         CountriesLoadedEvent(it) as LinkGeneratorEvent
                     }
                     .onErrorReturn {
-
+                        idlingResource.decrement()
                         val errorMessage = validateStatusCode(it)
                         showToast(errorMessage, activityService.activity, Toast.LENGTH_LONG)
                         CountriesExceptionEvent(errorMessage)

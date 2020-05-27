@@ -1,6 +1,6 @@
 package br.com.angelorobson.whatsapplinkgenerator
 
-import br.com.angelorobson.whatsapplinkgenerator.di.DaggerRealComponent
+import br.com.angelorobson.whatsapplinkgenerator.di.DaggerTestComponent
 import br.com.angelorobson.whatsapplinkgenerator.model.database.dao.HistoryDao
 import br.com.angelorobson.whatsapplinkgenerator.model.entities.HistoryEntity
 import br.com.angelorobson.whatsapplinkgenerator.ui.App
@@ -24,10 +24,10 @@ class AndroidTestApplication : App() {
 
     }
 
-  /*  override val component by lazy {
+    override val component by lazy {
         DaggerTestComponent.builder()
             .context(this)
             .historyDao(historyDao)
             .build()
-    }*/
+    }
 }
