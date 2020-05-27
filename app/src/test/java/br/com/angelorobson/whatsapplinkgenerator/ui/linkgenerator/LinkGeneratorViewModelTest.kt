@@ -48,7 +48,7 @@ class LinkGeneratorViewModelTest {
     }
 
     @Test
-    fun countriesLoadedEvent_loadCountries() {
+    fun countriesLoadedEvent_CountriesLoadedUpdated() {
         val model = LinkGeneratorModel()
         val countries = listOf(country, country, country)
 
@@ -71,7 +71,7 @@ class LinkGeneratorViewModelTest {
     }
 
     @Test
-    fun CountriesExceptionEvent_getMessageError() {
+    fun countriesExceptionEvent_getMessageError() {
         val model = LinkGeneratorModel()
         val errorMessage = "error"
 
