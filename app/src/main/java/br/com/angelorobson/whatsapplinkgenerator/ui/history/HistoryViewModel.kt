@@ -4,7 +4,7 @@ import br.com.angelorobson.whatsapplinkgenerator.model.repositories.HistoryRepos
 import br.com.angelorobson.whatsapplinkgenerator.ui.MobiusVM
 import br.com.angelorobson.whatsapplinkgenerator.ui.share.sendMessageToWhatsApp
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.ActivityService
-import br.com.angelorobson.whatsapplinkgenerator.ui.utils.Navigator
+import br.com.angelorobson.whatsapplinkgenerator.ui.utils.IdlingResource
 import com.spotify.mobius.Next
 import com.spotify.mobius.Next.dispatch
 import com.spotify.mobius.Next.next
@@ -40,7 +40,7 @@ fun historyUpdate(
 
 class HistoryViewModel @Inject constructor(
     repository: HistoryRepository,
-    navigator: Navigator,
+    idlingResource: IdlingResource,
     activityService: ActivityService
 ) : MobiusVM<HistoryModel, HistoryEvent, HistoryEffect>(
     "HistoryViewModel",
@@ -49,19 +49,23 @@ class HistoryViewModel @Inject constructor(
     RxMobius.subtypeEffectHandler<HistoryEffect, HistoryEvent>()
         .addTransformer(ObserverHistoriesEffect::class.java) { upstream ->
             upstream.switchMap {
+                idlingResource.increment()
                 repository.getAll()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .map { histories ->
-                        HistoryLoadedEvent(histories)
+                        idlingResource.decrement()
+                        HistoryLoadedEvent(histories) as HistoryEvent
                     }
-                    .doOnError {
-                        HistoryExceptionEvent(it.localizedMessage)
+                    .onErrorReturn {
+                        HistoryExceptionEvent(it.localizedMessage) as HistoryEvent
                     }
             }
         }
         .addConsumer(ResendMessageToWhatsAppEffect::class.java) { effect ->
+            idlingResource.increment()
             sendMessageToWhatsApp(activityService.activity, effect.history)
+            idlingResource.decrement()
         }
         .build()
 )

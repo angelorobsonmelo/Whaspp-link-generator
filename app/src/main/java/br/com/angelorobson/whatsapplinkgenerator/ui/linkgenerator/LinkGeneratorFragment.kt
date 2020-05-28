@@ -35,8 +35,28 @@ class LinkGeneratorFragment : BindingFragment<LinkGeneratorFragmentBinding>() {
     private lateinit var adapter: CountryAdapter
     private lateinit var mValidator: Validator
 
+
     override fun onStart() {
         super.onStart()
+        etPhoneNumber.requestFocus()
+
+       /* val connectivityManager =
+            context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        connectivityManager?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                it.registerDefaultNetworkCallback(object : ConnectivityManager.NetworkCallback() {
+                    override fun onAvailable(network: Network) {
+                        //take action when network connection is gained
+                        println("Ddd")
+                    }
+
+                    override fun onLost(network: Network?) {
+                        //take action when network connection is lost
+                    }
+                })
+            }
+        }*/
+
         setupValidator()
 
         setHasOptionsMenu(true)
