@@ -10,3 +10,11 @@ fun showToast(message: String, context: Context, duration: Int = Toast.LENGTH_SH
         duration
     ).show()
 }
+
+fun showToastWithResString(message: Int, context: Context, duration: Int = Toast.LENGTH_SHORT) {
+    Toast.makeText(
+        context,
+        message,
+        duration
+    ).show()
+}
