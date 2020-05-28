@@ -114,9 +114,12 @@ dependencies {
     androidTestImplementation "androidx.test:runner:$testRunnerVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
     androidTestImplementation "androidx.test:rules:$rulesVersion"
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.1.0'
+
     instrumentedImplementation "androidx.test:core:$testingVersion"
     instrumentedImplementation "androidx.fragment:fragment-testing:$fragmentVersion"
     instrumentedImplementation "com.squareup.okhttp3:mockwebserver:$mockWebServerVersion"
+
 
     kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion"
 

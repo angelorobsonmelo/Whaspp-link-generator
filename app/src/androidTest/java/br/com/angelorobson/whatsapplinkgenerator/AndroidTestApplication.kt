@@ -7,6 +7,7 @@ import br.com.angelorobson.whatsapplinkgenerator.ui.App
 import br.com.angelorobson.whatsapplinkgenerator.ui.component
 import io.reactivex.Completable
 import io.reactivex.Observable
+import io.reactivex.Single
 
 import io.reactivex.subjects.PublishSubject
 
@@ -20,7 +21,7 @@ class AndroidTestApplication : App() {
         }
 
         override fun insert(historyEntity: HistoryEntity): Completable {
-            throw NotImplementedError("Not implemented in instrumented testing")
+            return Completable.complete()
         }
 
     }

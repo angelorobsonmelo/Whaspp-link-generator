@@ -108,6 +108,7 @@ class LinkGeneratorViewModel @Inject constructor(
         }
         .addTransformer(SaveHistoryEffect::class.java) { upstream ->
             upstream.switchMap { effect ->
+                idlingResource.increment()
                 historyRepository.saveHistory(effect.history)
                     .subscribeOn(Schedulers.newThread())
                     .toSingleDefault(SendMessageToWhatsAppEvent(effect.history))
@@ -126,6 +127,7 @@ class LinkGeneratorViewModel @Inject constructor(
                 effect.message
             )
         }.addConsumer(SendMessageToWhatsAppEffect::class.java) { effect ->
+            idlingResource.decrement()
             sendMessageToWhatsApp(
                 activityService.activity,
                 effect.history

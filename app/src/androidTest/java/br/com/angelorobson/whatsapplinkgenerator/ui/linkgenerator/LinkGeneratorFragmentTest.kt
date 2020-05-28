@@ -26,6 +26,7 @@ import org.junit.Test
 
 class LinkGeneratorFragmentTest {
 
+
     private val mockWebServer = MockWebServer()
     var idlingResource: TestIdlingResource? = null
     private var resources: Resources? = null
@@ -47,8 +48,9 @@ class LinkGeneratorFragmentTest {
             resources = fragment.resources
             idlingResource =
                 ((fragment.activity!!.component as TestComponent).idlingResource() as TestIdlingResource)
-              val activityService =  ((fragment.activity!!.component as TestComponent).activityService() as ActivityService)
-             activityService.onCreate(fragment.activity!!)
+            val activityService =
+                ((fragment.activity!!.component as TestComponent).activityService() as ActivityService)
+            activityService.onCreate(fragment.activity!!)
 
             IdlingRegistry.getInstance().register(idlingResource!!.countingIdlingResource)
             idlingResource!!.increment()
@@ -107,4 +109,14 @@ class LinkGeneratorFragmentTest {
 
         onView(withText(R.string.copied)).inRoot(isToast()).check(matches(isDisplayed()));
     }
+
+ /*   @Test
+    fun clickSendButton_withFormValid_openWhatsAppIfInstalled() {
+        TestUtils.waitEspresso(2000)
+
+        onView(withId(R.id.etPhoneNumber)).perform(typeText("8299155554"))
+        onView(withId(R.id.btnSendMessage)).perform(click())
+//        intended(toPackage("com.whatsapp"))
+    }*/
+
 }
