@@ -1,7 +1,6 @@
 package br.com.angelorobson.whatsapplinkgenerator.ui.history
 
-import br.com.angelorobson.whatsapplinkgenerator.model.domains.Country
-import br.com.angelorobson.whatsapplinkgenerator.model.domains.History
+import br.com.angelorobson.whatsapplinkgenerator.model.builders.HistoryBuild
 import com.spotify.mobius.test.NextMatchers.*
 import com.spotify.mobius.test.UpdateSpec
 import org.junit.Before
@@ -11,19 +10,9 @@ class HistoryViewModelTest {
 
     private lateinit var updateSpec: UpdateSpec<HistoryModel, HistoryEvent, HistoryEffect>
 
-    private val dateTime = "27/05/2020 12:00"
-    private val message = "message"
-    private val phoneNumber = "phonenumber"
-
-    private val country =
-        Country("Brazil", "flag", areaCode = "areacode", countryShortName = "country")
-
-    private val history = History(
-        createdAt = dateTime,
-        country = country,
-        message = message,
-        phoneNumber = phoneNumber
-    )
+    private val history = HistoryBuild.Builder()
+        .oneHistory()
+        .build()
 
     @Before
     fun setUp() {
@@ -43,7 +32,6 @@ class HistoryViewModelTest {
                     hasNoModel()
                 )
             )
-
     }
 
     @Test

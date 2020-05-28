@@ -1,7 +1,7 @@
 package br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator
 
-import br.com.angelorobson.whatsapplinkgenerator.model.domains.Country
-import br.com.angelorobson.whatsapplinkgenerator.model.domains.History
+import br.com.angelorobson.whatsapplinkgenerator.model.builders.CountryBuild
+import br.com.angelorobson.whatsapplinkgenerator.model.builders.HistoryBuild
 import br.com.angelorobson.whatsapplinkgenerator.ui.share.getNow
 import com.spotify.mobius.test.NextMatchers.*
 import com.spotify.mobius.test.UpdateSpec
@@ -14,19 +14,23 @@ import org.junit.Test
 class LinkGeneratorViewModelTest {
 
     private lateinit var updateSpec: UpdateSpec<LinkGeneratorModel, LinkGeneratorEvent, LinkGeneratorEffect>
-    private val country =
-        Country("Brazil", "flag", areaCode = "areacode", countryShortName = "country")
 
-    private val dateTime = "27/05/2020 12:00"
+    private val dateTimeFormatted = "27/05/2020 12:00"
     private val message = "message"
-    private val phoneNumber = "phonenumber"
+    private val phoneNumber = "991228122"
 
-    private val history = History(
-        createdAt = dateTime,
-        country = country,
-        message = message,
-        phoneNumber = phoneNumber
-    )
+    private val country = CountryBuild.Builder()
+        .oneCountry()
+        .build()
+
+    private val history = HistoryBuild.Builder()
+        .id(null)
+        .createdAt(dateTimeFormatted)
+        .country(country)
+        .message(message)
+        .phoneNumber(phoneNumber)
+        .build()
+
 
     @Before
     fun setUp() {
@@ -102,8 +106,7 @@ class LinkGeneratorViewModelTest {
         val model = LinkGeneratorModel()
 
         mockkStatic("br.com.angelorobson.whatsapplinkgenerator.ui.share.DateTimeUtilsKt")
-        every { getNow() } returns dateTime
-
+        every { getNow() } returns dateTimeFormatted
 
         updateSpec
             .given(model)
@@ -114,7 +117,6 @@ class LinkGeneratorViewModelTest {
                     message = message,
                     country = country,
                     isFormValid = true
-
                 )
             )
             .then(

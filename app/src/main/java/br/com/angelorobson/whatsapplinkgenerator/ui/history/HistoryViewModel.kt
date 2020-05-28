@@ -40,7 +40,6 @@ fun historyUpdate(
 
 class HistoryViewModel @Inject constructor(
     repository: HistoryRepository,
-    idlingResource: IdlingResource,
     activityService: ActivityService
 ) : MobiusVM<HistoryModel, HistoryEvent, HistoryEffect>(
     "HistoryViewModel",
@@ -49,24 +48,19 @@ class HistoryViewModel @Inject constructor(
     RxMobius.subtypeEffectHandler<HistoryEffect, HistoryEvent>()
         .addTransformer(ObserverHistoriesEffect::class.java) { upstream ->
             upstream.switchMap {
-                idlingResource.increment()
                 repository.getAll()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .map { histories ->
-                        idlingResource.decrement()
                         HistoryLoadedEvent(histories) as HistoryEvent
                     }
                     .onErrorReturn {
-                        idlingResource.decrement()
                         HistoryExceptionEvent(it.localizedMessage) as HistoryEvent
                     }
             }
         }
         .addConsumer(ResendMessageToWhatsAppEffect::class.java) { effect ->
-            idlingResource.increment()
             sendMessageToWhatsApp(activityService.activity, effect.history)
-            idlingResource.decrement()
         }
         .build()
 )

@@ -6,31 +6,27 @@ import br.com.angelorobson.whatsapplinkgenerator.model.domains.History
 class HistoryBuild {
 
     data class Builder(
-        var id: Int? = null,
-        var createdAt: String = "",
-        var message: String = "",
-        var phoneNumber: String = "",
-        var country: Country = Country()
+        private var id: Int? = null,
+        private var createdAt: String = "",
+        private var message: String = "",
+        private var phoneNumber: String = "",
+        private var country: Country = Country()
     ) {
 
-        fun id(id: Int) = apply { this.id = id }
+        fun id(id: Int?) = apply { this.id = id }
         fun createdAt(createdAt: String) = apply { this.createdAt = createdAt }
         fun message(message: String) = apply { this.message = message }
         fun phoneNumber(phoneNumber: String) = apply { this.phoneNumber = phoneNumber }
         fun country(country: Country) = apply { this.country = country }
 
-        fun oneHistory() =
-            History(
-                id = 1,
-                createdAt = "12/02/2020",
-                message = "Message sent",
-                phoneNumber = "82994441587",
-                country = Country(
-                    countryFullName = "Brazil",
-                    countryShortName = "BR",
-                    flag = "https://restcountries.eu/data/bra.svg"
-                )
-            )
+        fun oneHistory() = apply {
+            id = null
+            createdAt = "12/02/2020 17:20"
+            message = "Message sent"
+            phoneNumber = "82994441587"
+            country = CountryBuild.Builder()
+                .oneCountry().build()
+        }
 
         fun build() = History(
             id = id,
