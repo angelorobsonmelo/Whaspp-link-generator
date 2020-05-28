@@ -114,11 +114,11 @@ class LinkGeneratorViewModel @Inject constructor(
                     .doOnComplete {
                         idlingResource.decrement()
                     }
-                    .toSingleDefault(SendMessageToWhatsAppEvent(effect.history))
+                    .toSingleDefault(SendMessageToWhatsAppEvent(effect.history) as LinkGeneratorEvent)
                     .toObservable()
-                    .doOnError {
+                    .onErrorReturn {
                         idlingResource.decrement()
-                        CountriesExceptionEvent(it.localizedMessage)
+                        CountriesExceptionEvent(it.localizedMessage) as LinkGeneratorEvent
                     }
 
             }

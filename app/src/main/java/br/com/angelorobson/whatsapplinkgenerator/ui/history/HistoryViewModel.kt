@@ -58,6 +58,7 @@ class HistoryViewModel @Inject constructor(
                         HistoryLoadedEvent(histories) as HistoryEvent
                     }
                     .onErrorReturn {
+                        idlingResource.decrement()
                         HistoryExceptionEvent(it.localizedMessage) as HistoryEvent
                     }
             }

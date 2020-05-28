@@ -6,16 +6,18 @@ import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import br.com.angelorobson.whatsapplinkgenerator.AndroidTestApplication
 import br.com.angelorobson.whatsapplinkgenerator.R
 import br.com.angelorobson.whatsapplinkgenerator.di.TestComponent
+import br.com.angelorobson.whatsapplinkgenerator.model.builders.CountryEntityBuild
 import br.com.angelorobson.whatsapplinkgenerator.model.builders.HistoryEntityBuild
+import br.com.angelorobson.whatsapplinkgenerator.model.entities.HistoryEntity
 import br.com.angelorobson.whatsapplinkgenerator.ui.component
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.ActivityService
 import br.com.angelorobson.whatsapplinkgenerator.utils.TestIdlingResource
+import br.com.angelorobson.whatsapplinkgenerator.utils.withRecyclerView
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -27,6 +29,13 @@ class HistoryFragmentTest {
     var idlingResource: TestIdlingResource? = null
     private var resources: Resources? = null
     private var scenario: FragmentScenario<HistoryFragment>? = null
+    private val dateTime = "2020-05-27T11:24:43.644"
+
+    private val dateFormattedExpected = "2020-05-27 11:24"
+    private val countryShortName = "BR"
+    private val areaCode = "+55"
+    private val phoneNumber = "82994441587"
+    private val message = "Message sent"
 
     @Before
     fun setUp() {
@@ -45,19 +54,31 @@ class HistoryFragmentTest {
             IdlingRegistry.getInstance().register(idlingResource!!.countingIdlingResource)
 
             (fragment.activity!!.applicationContext as AndroidTestApplication).historyEntitySubject.onNext(
-                listOf(
-                    HistoryEntityBuild.Builder()
-                        .oneHistory()
-                        .createdAt("2020-05-27T11:24:43.644")
-                        .build(),
-                    HistoryEntityBuild.Builder()
-                        .oneHistory()
-                        .createdAt("2020-05-28T10:14:43.644")
-                        .id(2)
-                        .build()
-                )
+                getHistoriesEntities()
             )
         }
+    }
+
+    private fun getHistoriesEntities(): List<HistoryEntity> {
+        return listOf(
+            HistoryEntityBuild.Builder()
+                .oneHistoryEntity()
+                .createdAt(dateTime)
+                .phoneNumber(phoneNumber)
+                .countryEntity(
+                    CountryEntityBuild.Builder()
+                        .countryShortName(countryShortName)
+                        .areaCode(areaCode)
+                        .oneCountryEntity()
+                        .build()
+                )
+                .build(),
+            HistoryEntityBuild.Builder()
+                .oneHistoryEntity()
+                .id(2)
+                .message("Hi, how are you?")
+                .build()
+        )
     }
 
     @After
@@ -66,9 +87,33 @@ class HistoryFragmentTest {
     }
 
     @Test
-    fun initialViews() {
+    fun checkItemView() {
         onView(withId(R.id.recyclerView))
             .check(matches(isDisplayed()))
 
+        onView(withRecyclerView(R.id.recyclerView).atPositionOnView(0, R.id.tvDate))
+            .check(matches(withText(dateFormattedExpected)))
+
+        onView(withRecyclerView(R.id.recyclerView).atPositionOnView(0, R.id.ivFlag))
+            .check(matches(isDisplayed()))
+
+        onView(withRecyclerView(R.id.recyclerView).atPositionOnView(0, R.id.tvCountryName))
+            .check(matches(withText(countryShortName)))
+
+        onView(withRecyclerView(R.id.recyclerView).atPositionOnView(0, R.id.tvCountryCode))
+            .check(
+                matches(
+                    withText(
+                        resources?.getString(
+                            R.string.area_code_number,
+                            areaCode,
+                            phoneNumber
+                        )
+                    )
+                )
+            )
+
+        onView(withRecyclerView(R.id.recyclerView).atPositionOnView(0, R.id.tvMessage))
+            .check(matches(withText(message)))
     }
 }

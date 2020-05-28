@@ -20,17 +20,12 @@ class HistoryEntityBuild {
         fun countryEntity(countryEntity: CountryEntity) =
             apply { this.countryEntity = countryEntity }
 
-        fun oneHistory() = apply {
+        fun oneHistoryEntity() = apply {
             id = 1
-            createdAt = "12/02/2020"
+            createdAt = "2020-05-27T11:24:43.644"
             message = "Message sent"
             phoneNumber = "82994441587"
-            countryEntity = CountryEntity(
-                countryFullName = "Brazil",
-                countryShortName = "BR",
-                areaCode = "+55",
-                flag = "https://restcountries.eu/data/bra.svg"
-            )
+            countryEntity = CountryEntityBuild.Builder().oneCountryEntity().build()
         }
 
         fun build() = HistoryEntity(
