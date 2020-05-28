@@ -1,15 +1,16 @@
 package br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator
 
-import android.widget.Toast
 import br.com.angelorobson.whatsapplinkgenerator.model.domains.History
 import br.com.angelorobson.whatsapplinkgenerator.model.repositories.CountryRepository
 import br.com.angelorobson.whatsapplinkgenerator.model.repositories.HistoryRepository
 import br.com.angelorobson.whatsapplinkgenerator.ui.MobiusVM
-import br.com.angelorobson.whatsapplinkgenerator.ui.share.*
+import br.com.angelorobson.whatsapplinkgenerator.ui.share.copyToClipBoard
+import br.com.angelorobson.whatsapplinkgenerator.ui.share.getNow
+import br.com.angelorobson.whatsapplinkgenerator.ui.share.sendMessageToWhatsApp
+import br.com.angelorobson.whatsapplinkgenerator.ui.share.showDialogWithResString
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.ActivityService
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.HandlerErrorRemoteDataSource.validateStatusCode
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.IdlingResource
-import br.com.angelorobson.whatsapplinkgenerator.ui.utils.Navigator
 import com.spotify.mobius.Next
 import com.spotify.mobius.Next.*
 import com.spotify.mobius.Update
@@ -99,7 +100,7 @@ class LinkGeneratorViewModel @Inject constructor(
                     .onErrorReturn {
                         idlingResource.decrement()
                         val errorMessage = validateStatusCode(it)
-                        showToastWithResString(errorMessage.toInt(), activityService.activity)
+                        showDialogWithResString(errorMessage.toInt(), activityService.activity)
 
                         CountriesExceptionEvent(errorMessage)
                     }

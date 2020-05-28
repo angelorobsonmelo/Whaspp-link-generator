@@ -39,6 +39,7 @@ class LinkGeneratorFragment : BindingFragment<LinkGeneratorFragmentBinding>() {
     override fun onStart() {
         super.onStart()
         etPhoneNumber.requestFocus()
+        etPhoneNumber.setText("")
         setupValidator()
 
         setHasOptionsMenu(true)
