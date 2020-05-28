@@ -30,6 +30,7 @@ ext {
     dataBindingVersion = '3.3.1'
     dataBindingValidator = '2.0.0'
     materialAboutVersion = '0.2.3'
+    espressoIntentsVersion = '3.1.0'
 }
 
 allprojects {
