@@ -91,6 +91,7 @@ class LinkGeneratorViewModel @Inject constructor(
     RxMobius.subtypeEffectHandler<LinkGeneratorEffect, LinkGeneratorEvent>()
         .addTransformer(ObserveCountriesEffect::class.java) { upstream ->
             upstream.switchMap {
+                idlingResource.increment()
                 repository.getAllFromApi()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -101,7 +102,6 @@ class LinkGeneratorViewModel @Inject constructor(
                     .onErrorReturn {
                         idlingResource.decrement()
                         val errorMessage = validateStatusCode(it)
-                        showToast(errorMessage, activityService.activity, Toast.LENGTH_LONG)
                         CountriesExceptionEvent(errorMessage)
                     }
             }
@@ -111,6 +111,9 @@ class LinkGeneratorViewModel @Inject constructor(
                 idlingResource.increment()
                 historyRepository.saveHistory(effect.history)
                     .subscribeOn(Schedulers.newThread())
+                    .doOnComplete {
+                        idlingResource.decrement()
+                    }
                     .toSingleDefault(SendMessageToWhatsAppEvent(effect.history))
                     .toObservable()
                     .doOnError {
@@ -120,18 +123,27 @@ class LinkGeneratorViewModel @Inject constructor(
             }
         }
         .addConsumer(CopyToClipBoardEffect::class.java) { effect ->
+            idlingResource.increment()
+
             copyToClipBoard(
                 activityService.activity,
                 effect.countryCode,
                 effect.phoneNumber,
                 effect.message
             )
-        }.addConsumer(SendMessageToWhatsAppEffect::class.java) { effect ->
+
             idlingResource.decrement()
+
+        }.addConsumer(SendMessageToWhatsAppEffect::class.java) { effect ->
+            idlingResource.increment()
+
             sendMessageToWhatsApp(
                 activityService.activity,
                 effect.history
             )
+
+            idlingResource.decrement()
+
         }
         .build()
 
