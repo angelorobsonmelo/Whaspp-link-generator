@@ -10,33 +10,29 @@ import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
-import androidx.test.espresso.intent.matcher.IntentMatchers.toPackage
-import androidx.test.espresso.intent.rule.IntentsTestRule
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasPackage
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.rule.ActivityTestRule
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import br.com.angelorobson.whatsapplinkgenerator.R
 import br.com.angelorobson.whatsapplinkgenerator.di.TestComponent
-import br.com.angelorobson.whatsapplinkgenerator.ui.Activity
 import br.com.angelorobson.whatsapplinkgenerator.ui.component
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.ActivityService
 import br.com.angelorobson.whatsapplinkgenerator.utils.FileUtils
 import br.com.angelorobson.whatsapplinkgenerator.utils.TestIdlingResource
-import br.com.angelorobson.whatsapplinkgenerator.utils.TestUtils
 import br.com.angelorobson.whatsapplinkgenerator.utils.isToast
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.CoreMatchers.not
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
 
+@RunWith(AndroidJUnit4ClassRunner::class)
 class LinkGeneratorFragmentTest {
 
-
-    @get:Rule
-    var mActivityTestRule = IntentsTestRule(Activity::class.java, false, false)
 
     private val mockWebServer = MockWebServer()
     var idlingResource: TestIdlingResource? = null
@@ -65,17 +61,12 @@ class LinkGeneratorFragmentTest {
 
             IdlingRegistry.getInstance().register(idlingResource!!.countingIdlingResource)
         }
-
-        Intents.init()
-
     }
 
     @After
     fun tearDown() {
         IdlingRegistry.getInstance().unregister(idlingResource!!.countingIdlingResource)
         mockWebServer.close()
-        Intents.release()
-
     }
 
     @Test
@@ -119,7 +110,7 @@ class LinkGeneratorFragmentTest {
 
     @Test
     fun clickCopyLinkButton_withFormValid_showCopiedMessage() {
-        onView(withId(R.id.etPhoneNumber)).perform(typeText("8299155554"))
+        onView(withId(R.id.etPhoneNumber)).perform(typeText("54545754"))
         onView(withId(R.id.btnCopyLink)).perform(click())
 
         onView(withText(R.string.copied)).inRoot(isToast()).check(matches(isDisplayed()));
@@ -127,8 +118,14 @@ class LinkGeneratorFragmentTest {
 
     @Test
     fun clickSendButton_withFormValid_openWhatsAppIfInstalled() {
-        onView(withId(R.id.etPhoneNumber)).perform(typeText("8299155554"))
+        Intents.init()
+
+        onView(withId(R.id.etPhoneNumber)).perform(typeText("829445"))
         onView(withId(R.id.btnSendMessage)).perform(click())
+        intended(hasAction("android.intent.action.VIEW"))
+        intended(hasPackage("com.whatsapp"))
+
+        Intents.release()
     }
 
 }

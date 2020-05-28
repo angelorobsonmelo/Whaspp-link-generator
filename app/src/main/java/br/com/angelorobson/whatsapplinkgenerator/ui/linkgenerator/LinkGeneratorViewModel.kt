@@ -117,6 +117,7 @@ class LinkGeneratorViewModel @Inject constructor(
                     .toSingleDefault(SendMessageToWhatsAppEvent(effect.history))
                     .toObservable()
                     .doOnError {
+                        idlingResource.decrement()
                         CountriesExceptionEvent(it.localizedMessage)
                     }
 
@@ -133,7 +134,6 @@ class LinkGeneratorViewModel @Inject constructor(
             )
 
             idlingResource.decrement()
-
         }.addConsumer(SendMessageToWhatsAppEffect::class.java) { effect ->
             idlingResource.increment()
 
@@ -143,7 +143,6 @@ class LinkGeneratorViewModel @Inject constructor(
             )
 
             idlingResource.decrement()
-
         }
         .build()
 
