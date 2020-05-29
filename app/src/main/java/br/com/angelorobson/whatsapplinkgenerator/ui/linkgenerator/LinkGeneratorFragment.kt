@@ -18,9 +18,12 @@ import br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator.widgets.Countr
 import br.com.angelorobson.whatsapplinkgenerator.ui.share.showToast
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.BindingFragment
 import br.com.ilhasoft.support.validation.Validator
+import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.link_generator_fragment.*
 import java.util.*
 
@@ -42,6 +45,11 @@ class LinkGeneratorFragment : BindingFragment<LinkGeneratorFragmentBinding>() {
         etPhoneNumber.setText("")
         setupValidator()
 
+        val networkListenerObservable = ReactiveNetwork
+            .observeNetworkConnectivity(requireContext())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+
         setHasOptionsMenu(true)
         adapter = CountryAdapter(requireActivity(), countries)
 
@@ -62,8 +70,12 @@ class LinkGeneratorFragment : BindingFragment<LinkGeneratorFragmentBinding>() {
                     message = etTextMessage.text.toString(),
                     isFormValid = mValidator.validate()
                 )
+            },
+            networkListenerObservable.map {
+                progress_horizontal.isVisible = true
+                InitialEvent
             }
-        ).compose(getViewModel(LinkGeneratorViewModel::class).init(InitialEvent))
+        ).compose(getViewModel(LinkGeneratorViewModel::class))
             .subscribe(
                 { model ->
                     if (model.linkGeneratorResult is LinkGeneratorResult.Loading) {
