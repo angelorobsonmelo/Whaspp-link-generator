@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">WhatsApp Send</string>
+
+    <!-- First screen-->
     <string name="country_code">Country code</string>
     <string name="phone_number">Telephone number</string>
     <string name="hint_code">82</string>
@@ -7,34 +9,34 @@
     <string name="message">Message</string>
     <string name="send">Send</string>
     <string name="copy_link">Copy</string>
+    <string name="copied">Copied</string>
 
+
+    <!--    Return message from treatments with external calls-->
     <string name="unauthorized">Incorrect email or password.</string>
     <string name="internal_error">An internal server error has occurred.</string>
     <string name="socket_timout_error">Request time out, please try again.</string>
-    <string name="no_internet_connection_error">No Internet Connection</string>
+    <string name="no_internet_connection_error">No Internet Connection. Please, Confirm your phone\'s internet connection.</string>
     <string name="unknown_error">Unknown error, contact the app developer</string>
 
 
+    <!--    Generics -->
     <string name="area_code" translatable="false">(+%1$s)</string>
     <string name="area_code_number" translatable="false">(+%1$s) %2$s </string>
     <string name="area_code_formatted" translatable="false">+%1$s</string>
-
     <string name="whatApp_not_installed">WhatsApp not installed</string>
-    <string name="whatApp_link">WhatsApp Link</string>
 
 
-    <string name="empty_field">Fill this field</string>
+    <!--    About screen-->
     <string name="share">Share</string>
     <string name="share_via">Share by</string>
-    <string name="copied">Copied</string>
-
-    <string name="message_history">Message History</string>
-
-    <string name="no_history">No History</string>
-
     <string name="about">About</string>
     <string name="profession">Software Engineer</string>
     <string name="brief">Graduated in Information Systems and Post-graduated in Software Engineering. I am a lover and a technology enthusiast. Maker of ideas and curious.</string>
 
+
+    <!--    History Screen-->
+    <string name="message_history">Message History</string>
+    <string name="no_history">No History</string>
 
 </resources>

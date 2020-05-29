@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">WhatsApp Send</string>
+
+    <!-- First screen-->
     <string name="country_code">Código do País</string>
     <string name="phone_number">Número do Telefone</string>
     <string name="hint_code">82</string>
@@ -8,28 +10,28 @@
     <string name="message">Mensagem</string>
     <string name="send">Enviar</string>
     <string name="copy_link">Copiar</string>
+    <string name="copied">Copiado</string>
 
+
+    <!--    Return message from treatments with external calls-->
     <string name="unauthorized">E-mail ou senha incorreta.</string>
     <string name="internal_error">Ocorreu um erro interno no servidor.</string>
     <string name="socket_timout_error">Tempo de requisição esgotado, por favor tente novamente.</string>
-    <string name="no_internet_connection_error">Sem conexão com a internet</string>
+    <string name="no_internet_connection_error">Sem conexão com a internet. Por favor, confirme a conexão com a internet do seu telefone.</string>
     <string name="unknown_error">Erro desconhecido, entre em contato com o desenvolvedor do aplicativo</string>
 
+    <!--    Generics -->
     <string name="whatApp_not_installed">Este campo não pode ficar em branco</string>
 
-    <string name="empty_field">Preencha este campo</string>
+    <!--    History Screen-->
+    <string name="message_history">Histórico de Mensagens</string>
+    <string name="no_history">Sem Histórico</string>
+
+    <!--    About screen-->
+    <string name="about">Sobre</string>
     <string name="share">Compartilhar</string>
     <string name="share_via">Compartilhar Via</string>
-
-    <string name="whatApp_link">WhatsApp Link</string>
-    <string name="copied">Copiado</string>
-
-    <string name="message_history">Histórico de Mensagens</string>
-
-    <string name="no_history">Sem Histórico</string>
-    <string name="about">Sobre</string>
     <string name="profession">Engenheiro de software</string>
-
     <string name="brief">Graduado em Sistemas de Informação e Pós-graduado em Engenharia de Software. Sou um amante e um entusiasta da tecnologia. Fabricante de idéias e curioso.</string>
 
 </resources>
