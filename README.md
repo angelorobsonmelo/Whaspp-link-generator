@@ -8,11 +8,11 @@ Just open the app and enter the number and your country code. That's all.
 
 # Stacks
 * MVI pattern (Model-View-Intent)
-* Dependency Injection using Dagger 2, 
+* Dependency Injection using Dagger 2
 * RxJava (RxKotlin)
-* Room database,
-* Retrofit, 
-* ViewModels,
+* Room database
+* Retrofit 
+* ViewModels
 * Instrumentation testing with Espresso
 * jUnit testing business logic controllers.
 * Jetpack navigation
