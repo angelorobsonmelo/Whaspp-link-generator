@@ -11,6 +11,7 @@ Just open the app and enter the number and your country code. That's all.
 * Dependency Injection using Dagger 2
 * RxJava (RxKotlin)
 * Room database
+* Mobius Spotify
 * Retrofit 
 * ViewModels
 * Instrumentation testing with Espresso
@@ -23,7 +24,7 @@ Just open the app and enter the number and your country code. That's all.
 * And others...
 
 <video width="320" height="240" controls>
-  <source src="video/demo.mp4" type="video/mp4">
+  <source src="demo/demo.mp4" type="video/mp4">
 </video>
 
 
