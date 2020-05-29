@@ -27,5 +27,8 @@ Just open the app and enter the number and your country code. That's all.
 * Material Design 2.0
 * And others...
 
+#Instrumented tests
+ To run instrumented tests, change the build variants to "instrumented" and enjoy!
+
 
 
