@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Generador de Link</string>
+    <string name="app_name">WhatsApp Send</string>
     <string name="country_code">Código de País</string>
     <string name="phone_number">Numero de Teléfono</string>
     <string name="hint_code">82</string>

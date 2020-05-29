@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Link Generator</string>
+    <string name="app_name">WhatsApp Send</string>
     <string name="country_code">Country code</string>
     <string name="phone_number">Telephone number</string>
     <string name="hint_code">82</string>
