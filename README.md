@@ -15,7 +15,7 @@ Just open the app and enter the number and your country code. That's all.
 * Retrofit 
 * ViewModels
 * Instrumentation testing with Espresso
-* jUnit testing business logic controllers.
+* JUnit testing business logic controllers.
 * Jetpack navigation
 * Databinding
 * Moshi
