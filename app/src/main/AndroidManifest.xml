@@ -7,10 +7,10 @@
     <application
         android:name=".ui.App"
         android:allowBackup="true"
-        android:icon="@drawable/send_whats"
+        android:icon="@drawable/send_whas_icon"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
-        android:roundIcon="@drawable/send_whats"
+        android:roundIcon="@drawable/send_whas_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.Activity">
