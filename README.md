@@ -6,6 +6,10 @@ You need to send a message to someone but you don't want to save it as a contact
 Or you want to send a message to yourself...
 Just open the app and enter the number and your country code. That's all.
 
+# Demo
+<img src="demo/demo.gif" width="300" heigth="300">
+
+
 # Stacks
 * MVI pattern (Model-View-Intent)
 * Dependency Injection using Dagger 2
@@ -23,8 +27,5 @@ Just open the app and enter the number and your country code. That's all.
 * Material Design 2.0
 * And others...
 
-<video width="320" height="240" controls>
-  <source src="demo/demo.mp4" type="video/mp4">
-</video>
 
 
