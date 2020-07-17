@@ -10,7 +10,9 @@
     <string name="message">Mensaje</string>
     <string name="send">Enviar</string>
     <string name="copy_link">Copiar</string>
+    <string name="schedule">Programar</string>
     <string name="copied">Copiado</string>
+    <string name="schedule_message_title">Cuando quieres enviar el mensaje</string>
 
 
     <!--    Return message from treatments with external calls-->

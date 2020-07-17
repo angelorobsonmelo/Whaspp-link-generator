@@ -10,6 +10,9 @@ import android.widget.AdapterView
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import br.com.angelorobson.whatsapplinkgenerator.R
 import br.com.angelorobson.whatsapplinkgenerator.databinding.LinkGeneratorFragmentBinding
 import br.com.angelorobson.whatsapplinkgenerator.model.domains.Country
@@ -17,7 +20,10 @@ import br.com.angelorobson.whatsapplinkgenerator.ui.getViewModel
 import br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator.widgets.CountryAdapter
 import br.com.angelorobson.whatsapplinkgenerator.ui.share.showToast
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.BindingFragment
+import br.com.angelorobson.whatsapplinkgenerator.ui.utils.extensions.addHours
+import br.com.angelorobson.whatsapplinkgenerator.ui.worker.ScheduleMessageWorker
 import br.com.ilhasoft.support.validation.Validator
+import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.Observable
@@ -25,7 +31,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.link_generator_fragment.*
+import java.lang.System.currentTimeMillis
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 class LinkGeneratorFragment : BindingFragment<LinkGeneratorFragmentBinding>() {
@@ -99,6 +107,44 @@ class LinkGeneratorFragment : BindingFragment<LinkGeneratorFragmentBinding>() {
             )
 
         compositeDisposable.add(disposable)
+        btnScheduleMessage.setOnClickListener {
+            scheduleMessage()
+        }
+    }
+
+    private fun scheduleMessage() {
+        SingleDateAndTimePickerDialog.Builder(context) //.bottomSheet()
+            .curved()
+            .bottomSheet()
+            .displayAmPm(false)
+            .minDateRange(Date())
+            .minutesStep(1)
+            .defaultDate(Date())
+            .displayListener {
+                hideKeyBoard()
+            }
+            .title(getString(R.string.schedule_message_title))
+            .listener { selectedDate ->
+                val currentTime = Date().time
+                val customTime = selectedDate.time
+                val delay = customTime - currentTime
+                scheduleMessage(delay)
+            }
+            .display()
+    }
+
+
+    private fun scheduleMessage(delay: Long) {
+        val notificationWork = OneTimeWorkRequest
+            .Builder(ScheduleMessageWorker::class.java)
+            .setInitialDelay(delay, TimeUnit.MILLISECONDS)
+            .build()
+
+        val instanceWorkManager = WorkManager.getInstance(this.requireContext())
+
+        instanceWorkManager
+            .beginUniqueWork("SCHEDULE_MESSAGE_WORK_ID", ExistingWorkPolicy.REPLACE, notificationWork)
+            .enqueue()
     }
 
     private fun setupValidator() {

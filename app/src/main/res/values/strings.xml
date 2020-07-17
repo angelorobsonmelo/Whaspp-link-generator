@@ -8,9 +8,10 @@
     <string name="cell_phone">City code and nº cell</string>
     <string name="message">Message</string>
     <string name="send">Send</string>
+    <string name="schedule">Schedule</string>
     <string name="copy_link">Copy</string>
     <string name="copied">Copied</string>
-
+    <string name="schedule_message_title">Select when you want send message</string>
 
     <!--    Return message from treatments with external calls-->
     <string name="unauthorized">Incorrect email or password.</string>
