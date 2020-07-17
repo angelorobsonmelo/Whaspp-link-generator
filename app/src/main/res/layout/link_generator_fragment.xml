@@ -127,6 +127,21 @@
                 app:layout_constraintTop_toBottomOf="@id/etTextMessage"
                 app:layout_constraintTop_toTopOf="@id/btnSendMessage" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnScheduleMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/schedule"
+                android:textSize="12sp"
+                app:cornerRadius="0dp"
+                app:icon="@drawable/ic_schedule_white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btnCopyLink"
+                app:layout_constraintTop_toBottomOf="@id/etTextMessage"
+                app:layout_constraintTop_toTopOf="@id/btnCopyLink" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

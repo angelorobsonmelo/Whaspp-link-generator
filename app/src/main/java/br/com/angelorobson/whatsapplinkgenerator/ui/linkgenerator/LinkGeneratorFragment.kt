@@ -8,8 +8,10 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import androidx.core.view.isVisible
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
+import androidx.work.*
 import br.com.angelorobson.whatsapplinkgenerator.R
 import br.com.angelorobson.whatsapplinkgenerator.databinding.LinkGeneratorFragmentBinding
 import br.com.angelorobson.whatsapplinkgenerator.model.domains.Country
@@ -17,15 +19,22 @@ import br.com.angelorobson.whatsapplinkgenerator.ui.getViewModel
 import br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator.widgets.CountryAdapter
 import br.com.angelorobson.whatsapplinkgenerator.ui.share.showToast
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.BindingFragment
+import br.com.angelorobson.whatsapplinkgenerator.ui.utils.extensions.addHours
+import br.com.angelorobson.whatsapplinkgenerator.ui.worker.ScheduleMessageWorker
 import br.com.ilhasoft.support.validation.Validator
+import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.jakewharton.rxbinding3.view.clicks
+import com.paulinasadowska.rxworkmanagerobservers.extensions.getWorkInfoByIdObservable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.link_generator_fragment.*
+import java.lang.System.currentTimeMillis
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 class LinkGeneratorFragment : BindingFragment<LinkGeneratorFragmentBinding>() {
@@ -34,10 +43,10 @@ class LinkGeneratorFragment : BindingFragment<LinkGeneratorFragmentBinding>() {
 
     private val compositeDisposable = CompositeDisposable()
     private var countrySelected = Country()
+    private val schedulerPublisherSubject = PublishSubject.create<Long>()
     private var countries: ArrayList<Country> = arrayListOf()
     private lateinit var adapter: CountryAdapter
     private lateinit var mValidator: Validator
-
 
     override fun onStart() {
         super.onStart()
@@ -70,6 +79,16 @@ class LinkGeneratorFragment : BindingFragment<LinkGeneratorFragmentBinding>() {
                     isFormValid = mValidator.validate()
                 )
             },
+            schedulerPublisherSubject.map { delay ->
+                ScheduleMessageEvent(
+                    countryCode = etRegionCode.text.toString(),
+                    phoneNumber = etPhoneNumber.text.toString(),
+                    message = etTextMessage.text.toString(),
+                    country = countrySelected,
+                    isFormValid = mValidator.validate(),
+                    delay = delay
+                )
+            },
             networkListenerObservable.map {
                 progress_horizontal.isVisible = true
                 InitialEvent
@@ -99,6 +118,30 @@ class LinkGeneratorFragment : BindingFragment<LinkGeneratorFragmentBinding>() {
             )
 
         compositeDisposable.add(disposable)
+        btnScheduleMessage.setOnClickListener {
+            scheduleMessage()
+        }
+    }
+
+    private fun scheduleMessage() {
+        SingleDateAndTimePickerDialog.Builder(context) //.bottomSheet()
+            .curved()
+            .bottomSheet()
+            .displayAmPm(false)
+            .minDateRange(Date())
+            .minutesStep(1)
+            .defaultDate(Date())
+            .displayListener {
+                hideKeyBoard()
+            }
+            .title(getString(R.string.schedule_message_title))
+            .listener { selectedDate ->
+                val currentTime = Date().time
+                val customTime = selectedDate.time
+                val delay = customTime - currentTime
+                schedulerPublisherSubject.onNext(delay)
+            }
+            .display()
     }
 
     private fun setupValidator() {

@@ -17,6 +17,15 @@ data class ButtonSendClickedEvent(
     val isFormValid: Boolean
 ) : LinkGeneratorEvent()
 
+data class ScheduleMessageEvent(
+    val countryCode: String = "",
+    val phoneNumber: String = "",
+    val message: String = "",
+    val country: Country = Country(),
+    val isFormValid: Boolean,
+    val delay: Long = 0
+) : LinkGeneratorEvent()
+
 data class ButtonCopyClickedEvent(
     val countryCode: String = "",
     val phoneNumber: String = "",
