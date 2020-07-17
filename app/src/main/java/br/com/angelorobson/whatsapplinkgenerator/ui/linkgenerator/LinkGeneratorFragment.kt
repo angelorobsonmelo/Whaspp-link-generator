@@ -8,11 +8,10 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import androidx.core.view.isVisible
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
-import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
+import androidx.work.*
 import br.com.angelorobson.whatsapplinkgenerator.R
 import br.com.angelorobson.whatsapplinkgenerator.databinding.LinkGeneratorFragmentBinding
 import br.com.angelorobson.whatsapplinkgenerator.model.domains.Country
@@ -26,10 +25,12 @@ import br.com.ilhasoft.support.validation.Validator
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.jakewharton.rxbinding3.view.clicks
+import com.paulinasadowska.rxworkmanagerobservers.extensions.getWorkInfoByIdObservable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.link_generator_fragment.*
 import java.lang.System.currentTimeMillis
 import java.util.*
@@ -42,10 +43,10 @@ class LinkGeneratorFragment : BindingFragment<LinkGeneratorFragmentBinding>() {
 
     private val compositeDisposable = CompositeDisposable()
     private var countrySelected = Country()
+    private val schedulerPublisherSubject = PublishSubject.create<Long>()
     private var countries: ArrayList<Country> = arrayListOf()
     private lateinit var adapter: CountryAdapter
     private lateinit var mValidator: Validator
-
 
     override fun onStart() {
         super.onStart()
@@ -76,6 +77,16 @@ class LinkGeneratorFragment : BindingFragment<LinkGeneratorFragmentBinding>() {
                     phoneNumber = etPhoneNumber.text.toString(),
                     message = etTextMessage.text.toString(),
                     isFormValid = mValidator.validate()
+                )
+            },
+            schedulerPublisherSubject.map { delay ->
+                ScheduleMessageEvent(
+                    countryCode = etRegionCode.text.toString(),
+                    phoneNumber = etPhoneNumber.text.toString(),
+                    message = etTextMessage.text.toString(),
+                    country = countrySelected,
+                    isFormValid = mValidator.validate(),
+                    delay = delay
                 )
             },
             networkListenerObservable.map {
@@ -128,23 +139,9 @@ class LinkGeneratorFragment : BindingFragment<LinkGeneratorFragmentBinding>() {
                 val currentTime = Date().time
                 val customTime = selectedDate.time
                 val delay = customTime - currentTime
-                scheduleMessage(delay)
+                schedulerPublisherSubject.onNext(delay)
             }
             .display()
-    }
-
-
-    private fun scheduleMessage(delay: Long) {
-        val notificationWork = OneTimeWorkRequest
-            .Builder(ScheduleMessageWorker::class.java)
-            .setInitialDelay(delay, TimeUnit.MILLISECONDS)
-            .build()
-
-        val instanceWorkManager = WorkManager.getInstance(this.requireContext())
-
-        instanceWorkManager
-            .beginUniqueWork("SCHEDULE_MESSAGE_WORK_ID", ExistingWorkPolicy.REPLACE, notificationWork)
-            .enqueue()
     }
 
     private fun setupValidator() {

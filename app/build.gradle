@@ -146,4 +146,6 @@ dependencies {
 
     // optional - Test helpers
     androidTestImplementation "androidx.work:work-testing:$work_version"
+
+    implementation 'com.github.PaulinaSadowska:RxWorkManagerObservers:1.0.0'
 }

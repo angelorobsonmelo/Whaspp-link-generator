@@ -1,5 +1,10 @@
 package br.com.angelorobson.whatsapplinkgenerator.ui.linkgenerator
 
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
+import br.com.angelorobson.whatsapplinkgenerator.model.domains.Country
 import br.com.angelorobson.whatsapplinkgenerator.model.domains.History
 import br.com.angelorobson.whatsapplinkgenerator.model.repositories.CountryRepository
 import br.com.angelorobson.whatsapplinkgenerator.model.repositories.HistoryRepository
@@ -11,12 +16,15 @@ import br.com.angelorobson.whatsapplinkgenerator.ui.share.showDialogWithResStrin
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.ActivityService
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.HandlerErrorRemoteDataSource.validateStatusCode
 import br.com.angelorobson.whatsapplinkgenerator.ui.utils.IdlingResource
+import br.com.angelorobson.whatsapplinkgenerator.ui.worker.ScheduleMessageWorker
+import com.paulinasadowska.rxworkmanagerobservers.extensions.getWorkInfoByIdObservable
 import com.spotify.mobius.Next
 import com.spotify.mobius.Next.*
 import com.spotify.mobius.Update
 import com.spotify.mobius.rx2.RxMobius
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -74,6 +82,14 @@ fun linkGeneratorUpdate(
                 noChange()
             }
         is SendMessageToWhatsAppEvent -> dispatch(setOf(SendMessageToWhatsAppEffect(event.history)))
+        is ScheduleMessageEvent -> dispatch(setOf(ScheduleMessageToWhatsAppEffect(
+            event.country,
+            event.phoneNumber,
+            event.message,
+            event.delay)
+        ))
+
+
     }
 }
 
@@ -143,9 +159,35 @@ class LinkGeneratorViewModel @Inject constructor(
             )
 
             idlingResource.decrement()
+        }.addConsumer(ScheduleMessageToWhatsAppEffect::class.java) { effect ->
+            val notificationWork = OneTimeWorkRequestBuilder<ScheduleMessageWorker>()
+                .setInitialDelay(effect.delay, TimeUnit.SECONDS)
+                .build()
+
+            val instanceWorkManager = WorkManager
+                .getInstance(activityService.activity)
+
+            instanceWorkManager
+                .beginUniqueWork("SCHEDULE_MESSAGE_WORK_ID", ExistingWorkPolicy.REPLACE, notificationWork)
+                .enqueue()
+            
+            instanceWorkManager
+                .getWorkInfoByIdObservable(notificationWork.id)
+                .subscribe { workerInfo ->
+                    if (workerInfo.state == WorkInfo.State.SUCCEEDED) {
+                        val history = History(
+                            createdAt = getNow(),
+                            message = effect.message,
+                            phoneNumber = effect.phoneNumber,
+                            country = effect.country
+                        )
+                        sendMessageToWhatsApp(
+                            activityService.activity,
+                            history
+                        )
+                    }
+                }
         }
         .build()
 
 )
-
-
